@@ -17,7 +17,7 @@ namespace AdventOfCode2017
             Part1(Path.Combine(path, "dec02.txt"), 46402);
 
             Console.WriteLine();
-            Console.WriteLine("December 2nd Part2: ");
+            Console.WriteLine("December 2nd Part2");
             Part2(Path.Combine(path, "dec02part2test.txt"), 9);
             Part2(Path.Combine(path, "dec02.txt"), 265);
         }
