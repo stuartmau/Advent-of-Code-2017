@@ -12,6 +12,7 @@ namespace AdventOfCode2017
             Dec01.Run();
             Dec02.Run();
             Dec03.Run();
+            Dec04.Run();
 
             Console.Read();
             Console.WriteLine("KTHNXBYE");

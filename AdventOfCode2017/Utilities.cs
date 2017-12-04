@@ -80,5 +80,21 @@ namespace AdventOfCode2017
 
             return spreadsheet;
         }
+
+        public static List<string> LoadStrings(string filename)
+        {
+            List<string> lines = new List<string>();
+
+            using (var sr = File.OpenText(filename))
+            {
+                string line = "";
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+
+            return lines;
+        }
     }
 }
