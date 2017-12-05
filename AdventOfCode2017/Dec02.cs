@@ -7,12 +7,11 @@ namespace AdventOfCode2017
 {
     class Dec02
     {
-        internal static void Run()
+        internal static void Run(string path)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 2nd Part1");
-            string path = @"C:\Users\stuart\Documents\Visual Studio 2017\Projects\AdventOfCode2017\AdventOfCode2017\input\";
-
+            Console.WriteLine("December 2nd - Corruption Checksum - Part1");
+            
             Part1(Path.Combine(path, "dec02part1test.txt"), 18);
             Part1(Path.Combine(path, "dec02.txt"), 46402);
 

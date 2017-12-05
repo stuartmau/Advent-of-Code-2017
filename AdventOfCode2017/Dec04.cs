@@ -7,14 +7,12 @@ namespace AdventOfCode2017
 {
     public static class Dec04
     {
-        public static void Run()
+        public static void Run(string path)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 4th Part1");
+            Console.WriteLine("December 4th - High-Entropy Passphrases - Part1");
 
-            string path = @"C:\Users\stuart\Documents\Visual Studio 2017\Projects\AdventOfCode2017\AdventOfCode2017\input\";
             Part1(Path.Combine(path, "dec04.txt"), 455);
-
 
             Console.WriteLine();
             Console.WriteLine("December 4th Part2: ");

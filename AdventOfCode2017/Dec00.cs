@@ -9,7 +9,7 @@ namespace AdventOfCode2017
         public static void Run()
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December xx Part1");
+            Console.WriteLine("December xx - title - Part1");
             Part1("", 0);
 
             Console.WriteLine();

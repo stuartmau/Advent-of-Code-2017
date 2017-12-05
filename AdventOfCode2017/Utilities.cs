@@ -9,6 +9,7 @@ namespace AdventOfCode2017
     {
         public static string LineSeparator = System.Environment.NewLine + "--------------" + System.Environment.NewLine;
 
+
         public static void WriteInputFile(string filename)
         {
             string path = Path.GetDirectoryName(filename) + Path.DirectorySeparatorChar;
@@ -39,6 +40,19 @@ namespace AdventOfCode2017
                 Console.WriteLine("output: " + sum.ToString());
         }
 
+        /// <summary>
+        /// write start and end with normal, and error text with red. 
+        /// </summary>
+        public static void WriteColourfultext(string colourtext, ConsoleColor colour)
+        {
+            var curColour = Console.ForegroundColor;
+
+            Console.ForegroundColor = colour;
+            Console.Write(colourtext);
+
+            Console.ForegroundColor = curColour;
+        }
+
         public static void WriteColoufulBool(bool value)
         {
             WriteColoufulBool(value, ConsoleColor.Green, ConsoleColor.Red);
@@ -57,16 +71,19 @@ namespace AdventOfCode2017
             Console.ForegroundColor = curColour;
         }
 
+        /// <summary>
+        /// array of array of integers
+        /// </summary>
         public static List<List<int>> LoadIntArrays(string filename)
         {
             List<List<int>> spreadsheet = new List<List<int>>();
 
             using (var sr = File.OpenText(filename))
             {
-                string s = "";
-                while ((s = sr.ReadLine()) != null)
+                string line = "";
+                while ((line = sr.ReadLine()) != null)
                 {
-                    var arr = s.Split('\t', ' ', ',');
+                    var arr = line.Split('\t', ' ', ',');
 
                     List<int> row = new List<int>();
 
@@ -81,6 +98,28 @@ namespace AdventOfCode2017
             return spreadsheet;
         }
 
+        /// <summary>
+        /// one column of integers
+        /// </summary>
+        public static List<int> LoadIntColumn(string filename)
+        {
+            List<int> column = new List<int>();
+
+            using (var sr = File.OpenText(filename))
+            {
+                string line = "";
+                while ((line = sr.ReadLine()) != null)
+                {
+                    column.Add(int.Parse(line.Trim()));
+                }
+            }
+
+            return column;
+        }
+
+        /// <summary>
+        /// array of line strings
+        /// </summary>
         public static List<string> LoadStrings(string filename)
         {
             List<string> lines = new List<string>();
