@@ -10,12 +10,13 @@ namespace AdventOfCode2017
         public static void Run(string path)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 4th - High-Entropy Passphrases - Part1");
+            Console.WriteLine("December 4th - High-Entropy Passphrases -");
+            Console.WriteLine("Part1");
 
             Part1(Path.Combine(path, "dec04.txt"), 455);
 
             Console.WriteLine();
-            Console.WriteLine("December 4th Part2: ");
+            Console.WriteLine("Part2");
             Part2(Path.Combine(path, "dec04part2test.txt"),2);
             Part2(Path.Combine(path, "dec04.txt"), 186);
         }

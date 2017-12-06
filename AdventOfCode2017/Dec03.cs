@@ -10,7 +10,8 @@ namespace AdventOfCode2017
         {
             Console.WriteLine(Utilities.LineSeparator);
 
-            Console.WriteLine("December 3rd - Spiral Memory - Part1");
+            Console.WriteLine("December 3rd - Spiral Memory -");
+            Console.WriteLine("Part1");
 
             Part1(1, 0);
 
@@ -36,7 +37,7 @@ namespace AdventOfCode2017
 
 
             Console.WriteLine();
-            Console.WriteLine("December 3rd Part2");
+            Console.WriteLine("Part2");
 
             Part2(2,4);
             Part2(4,5);

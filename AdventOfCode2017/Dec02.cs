@@ -10,13 +10,14 @@ namespace AdventOfCode2017
         internal static void Run(string path)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 2nd - Corruption Checksum - Part1");
-            
+            Console.WriteLine("December 2nd - Corruption Checksum -");
+            Console.WriteLine("Part1");
+
             Part1(Path.Combine(path, "dec02part1test.txt"), 18);
             Part1(Path.Combine(path, "dec02.txt"), 46402);
 
             Console.WriteLine();
-            Console.WriteLine("December 2nd Part2");
+            Console.WriteLine("Part2");
             Part2(Path.Combine(path, "dec02part2test.txt"), 9);
             Part2(Path.Combine(path, "dec02.txt"), 265);
         }
