@@ -7,8 +7,171 @@ namespace AdventOfCode2017
 {
     public static class Utilities
     {
-        public static string LineSeparator = System.Environment.NewLine + "--------------" + System.Environment.NewLine;
+        public static string LineSeparator = System.Environment.NewLine + "--------------------------------" + System.Environment.NewLine;
 
+        /// <summary>
+        /// Writes a colourful ascii christmas tree to the console
+        /// </summary>
+        /// <example>
+        ///               .
+        ///             _.|,_
+        ///              '|`
+        ///              / \
+        ///             /`,o\
+        ///            /_* ~_\
+        ///            / o .'\
+        ///           /_,~' *_\
+        ///           /`. *  *\
+        ///          /   `~. o \
+        ///         /_ *    `~,_\
+        ///         /   o  *  ~'\
+        ///        / *    .~~'  o\
+        ///       /_,.~~'`    *  _\
+        ///       /`~..  o        \
+        ///      / *   `'~..   *   \
+        ///     /_     o    ``~~.,,_\
+        ///     /  *      *     ..~'\
+        ///    /*    o   _..~~`'*   o\
+        ///    `-.__.~'`'   *   ___.-'
+        ///          ":-------:"
+        ///        hjw \_____/ sm
+        /// </example>
+        /// <remarks>
+        /// hjw : Flump, Hayley Jane Wakenshaw - hayley@kersbergen.com
+        /// </remarks>
+        public static void WriteConsoleChirstmasTree()
+        {
+            var curColour = Console.ForegroundColor;
+            Random rnd = new Random();
+
+            List<ConsoleColor> colours = new List<ConsoleColor>();
+            colours.Add(ConsoleColor.Yellow);
+            colours.Add(ConsoleColor.Red);
+            colours.Add(ConsoleColor.Cyan);
+            colours.Add(ConsoleColor.Green);
+            colours.Add(ConsoleColor.Magenta);
+            colours.Add(ConsoleColor.Blue);
+            colours.Add(ConsoleColor.White);
+
+            ConsoleColor y = ConsoleColor.Yellow;
+            ConsoleColor g = ConsoleColor.DarkGreen;
+            ConsoleColor col = colours[rnd.Next(colours.Count)];
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            WLC(@"               .", y);
+            WLC(@"             _.|,_", y);
+            WLC(@"              '|`", y);
+
+            WLC(@"              / \", g);
+
+            WC(@"             /", g);
+            WC(@"`,o", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"            /_", g);
+            WC(@"* ~_", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"            /", g);
+            WC(@" o .'", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"           /", g);
+            WC(@"_,~' *", col, colours, rnd);
+            WLC(@"_\", g);
+
+            WC(@"           /", g);
+            WC(@"`. *  *", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"          /", g);
+            WC(@"   `~. o ", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"         /_", g);
+            WC(@" *    `~,_", col, colours, rnd);
+            WLC(@"\", g);
+
+            WC(@"         /", g);
+            WC(@"   o  *  ~'", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"        /", g);
+            WC(@" *    .~~'  o", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"       /", g);
+            WC(@"_,.~~'`    *  ", col, colours, rnd);
+            WLC(@"_\", g);
+
+
+
+            WC(@"       /", g);
+            WC(@"`~..  o        ", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"      /", g);
+            WC(@" *   `'~..   *   \", col, colours, rnd);
+            WLC(@"\", g);
+
+
+            WC(@"     /_", g);
+            WC(@"     o    ``~~.,,_", col, colours, rnd);
+            WLC(@"\", g);
+
+            WC(@"     /", g);
+            WC(@"  *      *     ..~'", col, colours, rnd);
+            WLC(@"\", g);
+
+            WC(@"    /", g);
+            WC(@"*    o   _..~~`'*   o", col, colours, rnd);
+            WLC(@"\", g);
+
+            WC(@"    `-.__", g);
+            WC(@".~'`'   *", col, colours, rnd);
+            WLC(@"   ___.-'", g);
+
+            WLC(@"          "":-------:""", g);
+            WLC(@"        hjw \_____/ sm", ConsoleColor.DarkYellow);
+
+            Console.ForegroundColor = curColour;
+        }
+
+        private static void WC(string str, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(str);
+        }
+
+        private static void WC(string str, ConsoleColor defaultcolour, List<ConsoleColor> colours, Random rnd)
+        {
+            foreach(var letter in str)
+            {
+                if (letter == '*')
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                else if(letter == 'o')
+                    Console.ForegroundColor = colours[rnd.Next(colours.Count)];
+                else
+                    Console.ForegroundColor = defaultcolour;
+
+                Console.Write(letter);
+            }
+            
+        }
+
+        private static void WLC(string str, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(str);
+        }
 
         public static void WriteInputFile(string filename)
         {

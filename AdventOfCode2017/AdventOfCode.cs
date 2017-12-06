@@ -9,6 +9,8 @@ namespace AdventOfCode2017
     {
         static void Main(string[] args)
         {
+            Utilities.WriteConsoleChirstmasTree();
+
             string path = @"C:\Users\stuart\Documents\Visual Studio 2017\Projects\AdventOfCode2017\AdventOfCode2017\input\";
 
             Dec01.Run();
