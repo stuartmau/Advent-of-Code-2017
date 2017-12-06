@@ -119,7 +119,7 @@ namespace AdventOfCode2017
 
 
             WC(@"      /", g);
-            WC(@" *   `'~..   *   \", col, colours, rnd);
+            WC(@" *   `'~..   *   ", col, colours, rnd);
             WLC(@"\", g);
 
 
