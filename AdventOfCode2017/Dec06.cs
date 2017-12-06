@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Numerics;
 
 namespace AdventOfCode2017
 {
@@ -11,12 +14,17 @@ namespace AdventOfCode2017
         public static void Run(string path)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 6th - Memory Reallocation - Part1");
+            Console.WriteLine("December 6th - Memory Reallocation -");
+            Console.WriteLine("Part1");
+
             Part1(Path.Combine(path, "dec06test.txt"), 5);
-            Part1(Path.Combine(path, "dec06.txt"), 14029);
+            //Part1(Path.Combine(path, "dec06.txt"), 14029); //slow
+
+            Console.WriteLine("hash version");
+            Part1Hash(Path.Combine(path, "dec06.txt"), 14029);
 
             Console.WriteLine();
-            Console.WriteLine("December 6th Part2: ");
+            Console.WriteLine("Part2");
             Part2(Path.Combine(path, "dec06test.txt"), 4);
             Part2(Path.Combine(path, "dec06.txt"), 2765);
         }
@@ -32,20 +40,24 @@ namespace AdventOfCode2017
             bool found = false;
             int cyclecount = 0;
 
-            var banks = input[0].ToArray();
-            int bankcount = banks.Length;
+            var bank = input[0].ToArray();
+            int bankcount = bank.Length;
+
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+
+            sw.Start();
 
             while (!found)
             {
-                int[] bankstate = new int[bankcount];
+                int[] currentCopy = new int[bankcount];
                 //find maxbank. lowest bank wins tie.
                 int max = -1;
                 int maxindex = -1;
                 for (int i = 0; i < bankcount; i++)
                 {
-                    int bankval = banks[i];
+                    int bankval = bank[i];
 
-                    bankstate[i] = bankval;
+                    currentCopy[i] = bankval;
 
                     if (bankval > max)
                     {
@@ -54,15 +66,18 @@ namespace AdventOfCode2017
                     }
                 }
 
-                //Ceck if this state has been seen before
-                foreach (var prevstate in states)
+                //Check if this state has been seen before
+                for (int i = 0; i < states.Count; i++)
                 {
+                    var prevstate = states[i];
                     int foundcount = 0;
-                    for (int i = 0; i < bankcount; i++)
+
+                    for (int j = 0; j < bankcount; j++)
                     {
-                        if (bankstate[i] == prevstate[i])
+                        if (currentCopy[j] == prevstate[j])
                             foundcount++;
                     }
+
                     if (foundcount == bankcount)
                     {
                         found = true;
@@ -70,27 +85,26 @@ namespace AdventOfCode2017
                     }
                 }
 
-                //add the current state to the list of states
-                states.Add(bankstate);
+                states.Add(currentCopy);
 
                 //redistribute the max block to each bank. 
                 if (!found)
                 {
                     //remove from max bank
-                    banks[maxindex] -= max;
+                    bank[maxindex] -= max;
 
                     //redistribute to other banks
                     int everybankgets = max / bankcount;
 
                     for (int i = 0; i < bankcount; i++)
-                        banks[i] += everybankgets;
+                        bank[i] += everybankgets;
 
                     //remove remaining 
                     int extra = max - (everybankgets * bankcount);
                     int extraindex = (maxindex + 1) % bankcount;
                     while (extra > 0)
                     {
-                        banks[extraindex]++;
+                        bank[extraindex]++;
                         extra--;
                         extraindex = (extraindex + 1) % bankcount;
                     }
@@ -101,39 +115,45 @@ namespace AdventOfCode2017
                 
             }
 
+            sw.Stop();
+
+
             Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(cyclecount, expected);
+            Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
         }
 
 
         /// <summary>
-        /// cound the lenght of the state cycle
+        /// redistribute memory and find when state cycles
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static void Part1Hash(string filename, int? expected = null)
         {
             var input = Utilities.LoadIntArrays(filename);
-            List<int[]> states = new List<int[]>();
+            Dictionary<BigInteger, int> states = new Dictionary<BigInteger, int>();
 
             bool found = false;
             int cyclecount = 0;
-            int prevFoundIndex = 0;
 
-            var banks = input[0].ToArray();
-            int bankcount = banks.Length;
+            var bank = input[0].ToArray();
+            int bankcount = bank.Length;
+
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            byte[] bytearr = new byte[sizeof(int)* bankcount];
 
             while (!found)
             {
-
-                int[] bankstate = new int[bankcount];
                 //find maxbank. lowest bank wins tie.
                 int max = -1;
                 int maxindex = -1;
+                ulong hash = 0;
+
+                
                 for (int i = 0; i < bankcount; i++)
                 {
-                    int bankval = banks[i];
-
-                    bankstate[i] = bankval;
-
+                    int bankval = bank[i];
+                    //incramental.AppendData(bankval)
                     if (bankval > max)
                     {
                         max = bankval;
@@ -141,43 +161,33 @@ namespace AdventOfCode2017
                     }
                 }
 
-                //Ceck if this state has been seen before
-                for(int j =0; j < states.Count; j++)
-                {
-                    var prevstate = states[j];
-                    int foundcount = 0;
-                    for (int i = 0; i < bankcount; i++)
-                    {
-                        if (bankstate[i] == prevstate[i])
-                            foundcount++;
-                    }
-                    if (foundcount == bankcount)
-                    {
-                        prevFoundIndex = j;
-                        found = true;
-                        break;
-                    }
-                }
 
-                states.Add(bankstate);
+                Buffer.BlockCopy(bank, 0, bytearr, 0, sizeof(int) * bankcount);
+                BigInteger bi = new BigInteger(bytearr);
 
 
+                //add the current state to the list of states. signal done when the key already exists. 
+                if (!states.TryAdd(bi, cyclecount))
+                    found = true;
+
+                //redistribute the max block to each bank. 
                 if (!found)
                 {
                     //remove from max bank
-                    banks[maxindex] -= max;
+                    bank[maxindex] -= max;
 
                     //redistribute to other banks
                     int everybankgets = max / bankcount;
 
                     for (int i = 0; i < bankcount; i++)
-                        banks[i] += everybankgets;
+                        bank[i] += everybankgets;
 
+                    //remove remaining 
                     int extra = max - (everybankgets * bankcount);
                     int extraindex = (maxindex + 1) % bankcount;
                     while (extra > 0)
                     {
-                        banks[extraindex]++;
+                        bank[extraindex]++;
                         extra--;
                         extraindex = (extraindex + 1) % bankcount;
                     }
@@ -188,10 +198,94 @@ namespace AdventOfCode2017
 
             }
 
-            int cycleLenght = states.Count - prevFoundIndex -1;
+            sw.Stop();
+
+
+            Utilities.WriteInputFile(filename);
+            Utilities.WriteOutput(cyclecount, expected);
+            Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
+        }
+
+        /// <summary>
+        /// cound the lenght of the state cycle
+        /// </summary>
+        public static void Part2(string filename, int? expected = null)
+        {
+            var input = Utilities.LoadIntArrays(filename);
+            Dictionary<BigInteger, int> states = new Dictionary<BigInteger, int>();
+
+            bool found = false;
+            int cyclecount = 0;
+
+            var bank = input[0].ToArray();
+            int bankcount = bank.Length;
+
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+
+            byte[] bytearr = new byte[sizeof(int) * bankcount];
+            BigInteger bi = new BigInteger();
+
+            while (!found)
+            {
+
+                int[] bankstate = new int[bankcount];
+                //find maxbank. lowest bank wins tie.
+                int max = -1;
+                int maxindex = -1;
+                for (int i = 0; i < bankcount; i++)
+                {
+                    int bankval = bank[i];
+
+                    bankstate[i] = bankval;
+
+                    if (bankval > max)
+                    {
+                        max = bankval;
+                        maxindex = i;
+                    }
+                }
+
+                Buffer.BlockCopy(bank, 0, bytearr, 0, sizeof(int) * bankcount);
+                bi = new BigInteger(bytearr);
+
+                //add the current state to the list of states. signal done when the key already exists. 
+                if (!states.TryAdd(bi, cyclecount))
+                    found = true;
+
+
+                if (!found)
+                {
+                    //remove from max bank
+                    bank[maxindex] -= max;
+
+                    //redistribute to other banks
+                    int everybankgets = max / bankcount;
+
+                    for (int i = 0; i < bankcount; i++)
+                        bank[i] += everybankgets;
+
+                    int extra = max - (everybankgets * bankcount);
+                    int extraindex = (maxindex + 1) % bankcount;
+                    while (extra > 0)
+                    {
+                        bank[extraindex]++;
+                        extra--;
+                        extraindex = (extraindex + 1) % bankcount;
+                    }
+
+                    cyclecount++;
+                }
+
+
+            }
+
+            int cycleLenght = cyclecount - states[bi];
+            sw.Stop();
 
             Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(cycleLenght, expected);
+            Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
         }
 
     }
