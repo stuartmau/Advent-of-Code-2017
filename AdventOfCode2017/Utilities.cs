@@ -203,6 +203,20 @@ namespace AdventOfCode2017
                 Console.WriteLine("output: " + sum.ToString());
         }
 
+        public static void WriteOutput(string resut, string expected)
+        {
+            bool found = resut.Equals(expected);
+
+            if (expected != null)
+            {
+                Console.Write("output: " + resut + " expected: ");
+                Utilities.WriteColoufulBool(found);
+                Console.WriteLine();
+            }
+            else
+                Console.WriteLine("output: " + resut);
+        }
+
         /// <summary>
         /// write start and end with normal, and error text with red. 
         /// </summary>
