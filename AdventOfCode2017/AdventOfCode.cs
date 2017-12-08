@@ -18,14 +18,14 @@ namespace AdventOfCode2017
             string path = @"C:\Users\stuart\Documents\Visual Studio 2017\Projects\AdventOfCode2017\AdventOfCode2017\input\";
 
 
-            Dec01.Run();
-            Dec02.Run(path);
-            Dec03.Run();
-            Dec04.Run(path);
-            Dec05.Run(path);
-            Dec06.Run(path);
-
-            Dec07.Run(path);
+            //Dec01.Run();
+            //Dec02.Run(path);
+            //Dec03.Run();
+            //Dec04.Run(path);
+            //Dec05.Run(path);
+            //Dec06.Run(path);
+            //Dec07.Run(path);
+            Dec08.Run(path);
 
             Console.Read();
             Console.WriteLine("KTHNXBYE");

@@ -189,9 +189,15 @@ namespace AdventOfCode2017
             Console.ForegroundColor = curColour;
         }
 
-        public static void WriteOutput(int sum, int? expected)
+        public static void WriteOutput(int? sum, int? expected)
         {
             bool found = sum == expected;
+            
+            if(sum == null)
+            {
+                Utilities.WriteColourfultext("Output not found", ConsoleColor.Red);
+            }
+
 
             if (expected != null)
             {
