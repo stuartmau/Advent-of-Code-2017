@@ -145,6 +145,56 @@ namespace AdventOfCode2017
             Console.ForegroundColor = curColour;
         }
 
+        private class Snow
+        {
+            public int x;
+            public int y;
+            public char flake = '#';
+
+            public Snow(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+        }
+        /// <summary>
+        /// same as writeConsoleChirstmastree but with 'snow' that fills up from the bottom of the screen if left running
+        /// </summary>
+        public static void WriteAnimatedConsoleChirstmasTree()
+        {
+            int x, y = 0;
+            int height = Console.WindowHeight;
+            int width = Console.WindowWidth;
+            List<Snow> snow = new List<Snow>();
+            Random rnd = new Random();
+
+            for (int i = 0; i < 10; i++)
+            {
+                snow.Add(new Snow(rnd.Next(width),rnd.Next(height)));
+            }
+
+
+            while(true)
+            {
+                Console.Clear();
+
+                height = Console.BufferHeight-1;
+                width = Console.BufferWidth-1;
+
+                WriteConsoleChirstmasTree();
+
+                foreach(var flake in snow)
+                {
+                    Console.SetCursorPosition(flake.x, flake.y);
+                    Console.Write(flake.flake);
+                }
+
+                System.Threading.Thread.Sleep(1000);
+            }
+            
+
+        }
+
         private static void WC(string str, ConsoleColor color)
         {
             Console.ForegroundColor = color;

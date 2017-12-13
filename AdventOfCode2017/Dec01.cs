@@ -24,38 +24,31 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// sum of the value of repeating digits, with wrap around of last/first digit. 
+        /// Sum of the value of repeating digits with wrap around of last/first digit. 
         /// </summary>
-        /// <param name="input">string of digits</param>
-        /// <returns>sum result</returns>
         public static void Part1(string input, int? expected = null)
         {
             int sum = 0;
 
             input = input + input[0]; //concat first to last
 
-            //find valid digits to sum. 
             for (int i = 0; i < input.Length - 1; i++)
             {
                 if (input[i] == input[i + 1])
                     sum += int.Parse(input.Substring(i, 1));
             }
 
-            //report
             Utilities.WriteOutput(sum, expected);
         }
 
 
         /// <summary>
-        /// sum of the value of digits half way around list, with wrap around
+        /// Sum of the value of digits half way around list with wrap around
         /// </summary>
-        /// <param name="input">string of digits</param>
-        /// <param name="expected">test result</param>
         public static void Part2(string input, int? expected = null)
         {
             int sum = 0;
 
-            //find valid digits to sum
             for (int i = 0; i < input.Length; i++)
             {
                 int index = i + input.Length / 2;

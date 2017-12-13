@@ -29,7 +29,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// Find the root element
+        /// Find the root element of a tree.
         /// </summary>
         public static void Part1(string filename, string expected = null)
         {
@@ -105,7 +105,7 @@ namespace AdventOfCode2017
 
 
         /// <summary>
-        /// exactly one element is the wrong weight. what should it be?
+        /// Exactly one element is the wrong weight. Find the correct weight.
         /// </summary>
         public static void Part2(string filename, int? expected = null)
         {
@@ -176,10 +176,7 @@ namespace AdventOfCode2017
                 if (expectedIsHigherCount > expectedIsLowerCount)
                     expectedweight = maxweight;
 
-
-
                 //find 
-
                 foreach (var child in node.children)
                 {
                     if (child.totalweight != expectedweight)

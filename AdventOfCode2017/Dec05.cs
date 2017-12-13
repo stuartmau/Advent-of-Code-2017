@@ -34,7 +34,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        ///  Find the number of steps to jump through the instructions incrementing the instructions as each is run
+        ///  Find the number of steps to jump through the instructions incrementing the instructions as each is run.
         /// </summary>
         public static void Part1(string filename, int? expected = null, string expectedFinalState = null)
         {

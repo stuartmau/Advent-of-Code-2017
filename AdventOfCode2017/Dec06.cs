@@ -28,7 +28,7 @@ namespace AdventOfCode2017
 
 
         /// <summary>
-        /// redistribute memory and find when state cycles
+        /// Redistribute memory and find when state cycles.
         /// </summary>
         public static void Part1(string filename, int? expected = null)
         {
@@ -97,7 +97,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// reports the length of the cycle
+        /// Reports the length of the cycle.
         /// </summary>
         public static void Part2(string filename, int? expected = null)
         {

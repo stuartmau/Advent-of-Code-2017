@@ -22,7 +22,9 @@ namespace AdventOfCode2017
             Part2(Path.Combine(path, "dec02.txt"), 265);
         }
 
-
+        /// <summary>
+        /// Sum of the difference for each row of largest and smallest values. 
+        /// </summary>
         private static void Part1(string filename, int? expected = null)
         {
             List<List<int>> spreadsheet = Utilities.LoadIntArrays(filename);
@@ -47,19 +49,17 @@ namespace AdventOfCode2017
                 sum += max - min;
             }
 
-            //report
             Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(sum, expected);
-
-
         }
 
+
+        /// <summary>
+        /// Sum of the evenly divisible values for each row.
+        /// </summary>
         private static void Part2(string filename, int? expected = null)
         {
             List<List<int>> spreadsheet = Utilities.LoadIntArrays(filename);
-
-            //for each row, find largest, and smallest values. 
-            //sum the difference each for each row. 
 
             int sum = 0;
             foreach (var row in spreadsheet)

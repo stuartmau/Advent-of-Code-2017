@@ -22,7 +22,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// valid lines do not have duplicate words
+        /// Valid lines do not have duplicate words.
         /// </summary>
         public static void Part1(string filename, int? expected = null)
         {
@@ -53,7 +53,7 @@ namespace AdventOfCode2017
 
 
         /// <summary>
-        /// valid lines do not have duplicate words or annagrams. 
+        /// Valid lines do not have duplicate words or annagrams. 
         /// </summary>
         public static void Part2(string filename, int? expected = null)
         {

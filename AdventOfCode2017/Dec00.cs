@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace AdventOfCode2017
 {
     public static class Dec00
     {
-        public static void Run()
+        public static void Run(string path = null)
         {
             Console.WriteLine(Utilities.LineSeparator);
             Console.WriteLine("December xx - title -");

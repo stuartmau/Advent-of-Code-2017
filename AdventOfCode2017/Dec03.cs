@@ -57,7 +57,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// arbitray sized rings OK!
+        /// Distance from input to center of spiral. 
         /// </summary>
         public static void Part1(int input, int? expected = null)
         {
@@ -112,7 +112,7 @@ namespace AdventOfCode2017
 
 
         /// <summary>
-        /// walk around the array and calculate
+        /// Find the next largest value from spiral pattern. 
         /// </summary>
         public static void Part2(int input, int? expected = null)
         {
