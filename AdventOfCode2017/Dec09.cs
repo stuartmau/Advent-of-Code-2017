@@ -22,7 +22,7 @@ namespace AdventOfCode2017
             Part1Evaluate("{{<!!>},{<!!>},{<!!>},{<!!>}}", 9);
             Part1Evaluate("{{<a!>},{<a!>},{<a!>},{<ab>}}", 3);
 
-            Part1(Path.Combine(path, "dec09.txt"));
+            Part1(Path.Combine(path, "dec09.txt"), 16021);
 
             Console.WriteLine();
             Console.WriteLine("Part2");
@@ -35,7 +35,7 @@ namespace AdventOfCode2017
             Part2Evaluate("<!!!>>", 0);
             Part2Evaluate(@"<{o""i!a,<{i<a>", 10);
 
-            Part2(Path.Combine(path, "dec09.txt"));
+            Part2(Path.Combine(path, "dec09.txt"), 7685);
         }
 
         /// <summary>
