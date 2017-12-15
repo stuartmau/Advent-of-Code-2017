@@ -15,33 +15,178 @@ namespace AdventOfCode2017
             Console.WriteLine("December 11th - Hex Ed -");
             Console.WriteLine("Part1");
 
-            Part1Evaluate("ne,ne,ne", 10, 3);
-            Part1Evaluate("ne,ne,sw,sw", 10, 0);
-            Part1Evaluate("ne,ne,s,s", 10, 2);
-            Part1Evaluate("se,sw,se,sw,sw", 10, 3);
+            //Part1BFS("ne,ne,ne", 10, 3);
+            //Part1BFS("ne,ne,sw,sw", 10, 0);
+            //Part1BFS("ne,ne,s,s", 10, 2);
+            //Part1BFS("se,sw,se,sw,sw", 10, 3);
+            //Part1BFSinput(Path.Combine(path, "dec11.txt"), 2000, 805);
 
-            Part1(Path.Combine(path, "dec11.txt"), 3000, 805);
+            Part1Coordinate("ne,ne,ne", 3);
+            Part1Coordinate("ne,ne,sw,sw",  0);
+            Part1Coordinate("ne,ne,s,s", 2);
+            Part1Coordinate("se,sw,se,sw,sw",  3);
+            Part1Coordinateinput(Path.Combine(path, "dec11.txt"), 805);
+
 
             Console.WriteLine();
             Console.WriteLine("Part2");
-            Part2(Path.Combine(path, "dec11.txt"), 3000, 1535);
+            //Part2BFSinput(Path.Combine(path, "dec11.txt"), 3000, 1535);
+            Part2Coordinateinput(Path.Combine(path, "dec11.txt"), 1535);
         }
 
         /// <summary>
-        /// Find the shortest path across a hex grid.
+        /// Find the shortest path across a hex grid using BFS.
         /// </summary>
-        public static void Part1(string filename, int gridsize, int? expected = null)
+        public static void Part1BFSinput(string filename, int gridsize, int? expected = null)
         {
             var strings = Utilities.LoadStrings(filename);
 
             foreach (var line in strings)
-                Part1Evaluate(line, gridsize, expected);
+                Part1BFS(line, gridsize, expected);
         }
 
         /// <summary>
-        /// Find the shortest path across a hex grid.
+        /// Find the shortest path across a hex grid using cube coordinates. 
         /// </summary>
-        public static void Part1Evaluate(string input, int gridsize, int? expected = null)
+        public static void Part1Coordinateinput(string filename, int? expected = null)
+        {
+            var strings = Utilities.LoadStrings(filename);
+
+            foreach (var line in strings)
+                Part1Coordinate(line, expected);
+        }
+
+        /// <summary>
+        ///  Find the furthest distance from home on hex grid using BFS.
+        /// </summary>
+        public static void Part2BFSinput(string filename, int gridsize, int? expected = null)
+        {
+            var strings = Utilities.LoadStrings(filename);
+
+            foreach (var line in strings)
+                Part2BFS(line, gridsize, expected);
+        }
+
+        /// <summary>
+        ///  Find the furthest distance from home on hex grid using cube coordinates.
+        /// </summary>
+        public static void Part2Coordinateinput(string filename, int? expected = null)
+        {
+            var strings = Utilities.LoadStrings(filename);
+
+            foreach (var line in strings)
+                Part2Coordinate(line, expected);
+        }
+
+        /// <summary>
+        /// Find the shortest path across a hex grid using cube coordinates. 
+        /// https://www.redblobgames.com/grids/hexagons/
+        /// </summary>
+        public static void Part1Coordinate(string input, int? expected = null)
+        {
+            var walk = input.Split(',');
+
+            int a = 0, b = 0, c = 0;
+
+            for (int i = 0; i < walk.Length; i++)
+            {
+                switch (walk[i])
+                {
+                    case "nw":
+                        a++;
+                        b--;
+                        break;
+                    case "n":
+                        a++;
+                        c--;
+                        break;
+                    case "ne":
+                        b++;
+                        c--;
+                        break;
+                    case "se":
+                        a--;
+                        b++;
+                        break;
+                    case "s":
+                        a--;
+                        c++;
+                        break;
+                    case "sw":
+                        b--;
+                        c++;
+                        break;
+                }
+            }
+
+            //caluclate distance
+            int distance = CubeDistance(a, b, c, 0, 0, 0);
+            Utilities.WriteOutput(distance, expected);
+        }
+
+
+        /// <summary>
+        /// Find the shortest path across a hex grid using cube coordinates. 
+        /// https://www.redblobgames.com/grids/hexagons/
+        /// </summary>
+        public static void Part2Coordinate(string input, int? expected = null)
+        {
+            var walk = input.Split(',');
+
+            int a = 0, b = 0, c = 0;
+            int maxdist = 0;
+
+            for (int i = 0; i < walk.Length; i++)
+            {
+                switch (walk[i])
+                {
+                    case "nw":
+                        a++;
+                        b--;
+                        break;
+                    case "n":
+                        a++;
+                        c--;
+                        break;
+                    case "ne":
+                        b++;
+                        c--;
+                        break;
+                    case "se":
+                        a--;
+                        b++;
+                        break;
+                    case "s":
+                        a--;
+                        c++;
+                        break;
+                    case "sw":
+                        b--;
+                        c++;
+                        break;
+                }
+
+                int distance = CubeDistance(a, b, c, 0, 0, 0);
+
+                if (distance > maxdist)
+                    maxdist = distance;
+            }
+           
+            Utilities.WriteOutput(maxdist, expected);
+        }
+
+        /// <summary>
+        /// Hexagon Cube distance
+        /// </summary>
+        private static int CubeDistance(int a, int b, int c, int d, int e, int f)
+        {
+            return (Math.Abs(a - d) + Math.Abs(b - e) + Math.Abs(c - f)) / 2;
+        }
+
+        /// <summary>
+        /// Find the shortest path across a hex grid brute force.
+        /// </summary>
+        public static void Part1BFS(string input, int gridsize, int? expected = null)
         {
             var walk = input.Split(',');
 
@@ -114,10 +259,36 @@ namespace AdventOfCode2017
             //count out from home
             FillHexDistances(home);
 
+            //simplify walk
+            int[] counter = new int[6];
+
             foreach (var direction in walk)
             {
-                current = current.GetNeighbour(direction);
+                if (direction == "nw")
+                    counter[0]++;
+                else if (direction == "n")
+                    counter[1]++;
+                else if (direction == "ne")
+                    counter[2]++;
+                else if (direction == "sw")
+                    counter[3]++;
+                else if (direction == "s")
+                    counter[4]++;
+                else if (direction == "se")
+                    counter[5]++;
             }
+
+            int nwse = counter[0] - counter[5];
+            int ns = counter[1] - counter[4];
+            int nesw = counter[2] - counter[3];
+
+            //travers simplified walk
+            for(int i =0; i< Math.Abs(nwse); i++)
+                    current = current.GetNeighbourNwSe(nwse);
+            for (int i = 0; i < Math.Abs(ns); i++)
+                current = current.GetNeighbourNS(ns);
+            for (int i = 0; i < Math.Abs(nesw); i++)
+                current = current.GetNeighbourNeSw(nesw);
 
             Utilities.WriteOutput(current.dist, expected);
 
@@ -175,21 +346,9 @@ namespace AdventOfCode2017
 
 
         /// <summary>
-        ///  Find the furthest distance from home on hex grid
-        /// </summary>
-        public static void Part2(string filename, int gridsize, int? expected = null)
-        {
-            var strings = Utilities.LoadStrings(filename);
-
-            foreach (var line in strings)
-                Part2Evaluate(line, gridsize, expected);
-        }
-
-
-        /// <summary>
         /// Find the shortest path across a hex grid.
         /// </summary>
-        public static void Part2Evaluate(string input, int gridsize, int? expected = null)
+        public static void Part2BFS(string input, int gridsize, int? expected = null)
         {
             var walk = input.Split(',');
 
@@ -317,9 +476,35 @@ namespace AdventOfCode2017
                 }
             }
 
+            internal Hex GetNeighbourNwSe(int count)
+            {
+                if (count > 0)
+                    return nw;
+                else if (count < 0)
+                    return se;
+                else
+                    return this;
+            }
 
+            internal Hex GetNeighbourNS(int count)
+            {
+                if (count > 0)
+                    return n;
+                else if (count < 0)
+                    return s;
+                else
+                    return this;
+            }
 
-
+            internal Hex GetNeighbourNeSw(int count)
+            {
+                if (count > 0)
+                    return ne;
+                else if (count < 0)
+                    return sw;
+                else
+                    return this;
+            }
         }
     }
 }
