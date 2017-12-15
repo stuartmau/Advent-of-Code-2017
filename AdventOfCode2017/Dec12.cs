@@ -67,6 +67,7 @@ namespace AdventOfCode2017
                 searchIDs = nextToSeach;
             }
 
+            Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(found.Count, expected);
         }
 
@@ -107,6 +108,7 @@ namespace AdventOfCode2017
                 groups++;
             }
 
+            Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(groups, expected);
         }
 

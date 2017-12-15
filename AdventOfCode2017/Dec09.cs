@@ -45,6 +45,8 @@ namespace AdventOfCode2017
         {
             var strings = Utilities.LoadStrings(filename);
 
+            Utilities.WriteInputFile(filename);
+
             foreach (var line in strings)
                 Part1Evaluate(line, expected);
         }
@@ -56,6 +58,8 @@ namespace AdventOfCode2017
         public static void Part2(string filename, int? expected = null)
         {
             var strings = Utilities.LoadStrings(filename);
+
+            Utilities.WriteInputFile(filename);
 
             foreach (var line in strings)
                 Part2Evaluate(line, expected);

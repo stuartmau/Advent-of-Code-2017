@@ -28,8 +28,8 @@ namespace AdventOfCode2017
             //Dec09.Run(path);
             //Dec10.Run(path);
             //Dec11.Run(path);
-            Dec12.Run(path);
-            //Dec13.Run(path);
+            //Dec12.Run(path);
+            Dec13.Run(path);
             //Dec14.Run(path);
             //Dec15.Run(path);
             //Dec16.Run(path);

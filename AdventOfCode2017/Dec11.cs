@@ -41,6 +41,8 @@ namespace AdventOfCode2017
         {
             var strings = Utilities.LoadStrings(filename);
 
+            Utilities.WriteInputFile(filename);
+
             foreach (var line in strings)
                 Part1BFS(line, gridsize, expected);
         }
@@ -51,6 +53,8 @@ namespace AdventOfCode2017
         public static void Part1Coordinateinput(string filename, int? expected = null)
         {
             var strings = Utilities.LoadStrings(filename);
+
+            Utilities.WriteInputFile(filename);
 
             foreach (var line in strings)
                 Part1Coordinate(line, expected);
@@ -63,6 +67,8 @@ namespace AdventOfCode2017
         {
             var strings = Utilities.LoadStrings(filename);
 
+            Utilities.WriteInputFile(filename);
+
             foreach (var line in strings)
                 Part2BFS(line, gridsize, expected);
         }
@@ -73,6 +79,8 @@ namespace AdventOfCode2017
         public static void Part2Coordinateinput(string filename, int? expected = null)
         {
             var strings = Utilities.LoadStrings(filename);
+
+            Utilities.WriteInputFile(filename);
 
             foreach (var line in strings)
                 Part2Coordinate(line, expected);
