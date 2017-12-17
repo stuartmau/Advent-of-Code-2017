@@ -78,7 +78,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Product of first two elements in a list after swaping order of subelements.
         /// </summary>
-        public static void Part2(string input, int ropelength, string expected = null)
+        public static string Part2(string input, int ropelength, string expected = null)
         {
             List<int> rope = new List<int>();
             for (int i = 0; i < ropelength; i++)
@@ -145,6 +145,8 @@ namespace AdventOfCode2017
 
             //convert dense hash to hex. 
             Utilities.WriteOutput(output, expected);
+
+            return output;
         }
     }
 }
