@@ -70,7 +70,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Run the dance up to a billion times checking when the pattern repeats and return the appropriate billionth pattern. 
         /// </summary>
-        public static void Part2(string filename, ulong maxcount, string expected = null)
+        public static void Part2(string filename, int maxcount, string expected = null)
         {
             int dancerCount = 16;
             List<int> dancers = new List<int>();
@@ -81,9 +81,9 @@ namespace AdventOfCode2017
             var input = Utilities.LoadStrings(filename);
             var dancemoves = input[0].Split(',');
 
-            ulong counter = 0;
+            int counter = 0;
             int patternlength = 0;
-            Dictionary<System.Numerics.BigInteger, ulong> hashes = new Dictionary<System.Numerics.BigInteger, ulong>();
+            Dictionary<System.Numerics.BigInteger, int> hashes = new Dictionary<System.Numerics.BigInteger, int>();
             byte[] bytearr = new byte[sizeof(int) * dancerCount];
 
             while (counter++ < maxcount)
@@ -95,7 +95,7 @@ namespace AdventOfCode2017
 
                 if (!hashes.TryAdd(bi, counter))
                 {
-                    patternlength = (int)counter;
+                    patternlength = counter;
                     break;
                 }
             }
@@ -103,14 +103,14 @@ namespace AdventOfCode2017
             //If the pattern repeats, find the appropriate pattern for the billionth itteration. 
             if (patternlength != 0)
             {
-                maxcount = maxcount % (ulong)(patternlength -1);
+                maxcount = maxcount % (patternlength -1);
 
                 //reset
                 for (int i = 0; i < dancerCount; i++)
                     dancers[i] = i;
 
                 //run the number of patterns
-                for (int i = 0; i < (int)maxcount; i++)
+                for (int i = 0; i < maxcount; i++)
                     RunDance(dancerCount, dancers, dancemoves);
             }
 
