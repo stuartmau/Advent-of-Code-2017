@@ -14,7 +14,7 @@ namespace AdventOfCode2017
         public static void Run(string path = null)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 19 - A Series of Tubes -");
+            Console.WriteLine("December 19th - A Series of Tubes -");
             Console.WriteLine("Part1");
             Part1(Path.Combine(path,"dec19test.txt"), "ABCDEF");
             Part1(Path.Combine(path, "dec19.txt"), "MOABEUCWQS");

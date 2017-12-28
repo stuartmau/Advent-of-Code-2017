@@ -12,7 +12,7 @@ namespace AdventOfCode2017
         public static void Run(string path = null)
         {
             Console.WriteLine(Utilities.LineSeparator);
-            Console.WriteLine("December 18 - Duet  -");
+            Console.WriteLine("December 18th - Duet  -");
             Console.WriteLine("Part1");
             Part1(Path.Combine(path, "dec18test.txt"), 4);
             Part1(Path.Combine(path, "dec18.txt"), 8600);
@@ -23,7 +23,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// 
+        /// Find the value of the recovered frequency. 
         /// </summary>
         public static void Part1(string filename, int? expected = null)
         {
@@ -115,7 +115,7 @@ namespace AdventOfCode2017
 
 
         /// <summary>
-        /// 
+        /// How many times did program 1 send a value
         /// </summary>
         public static void Part2(string filename, int? expected = null)
         {
