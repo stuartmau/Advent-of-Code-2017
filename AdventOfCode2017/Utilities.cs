@@ -274,7 +274,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// write start and end with normal, and error text with red. 
+        /// Console.Write with specified colour
         /// </summary>
         public static void WriteColourfultext(string colourtext, ConsoleColor colour)
         {
@@ -284,6 +284,37 @@ namespace AdventOfCode2017
             Console.Write(colourtext);
 
             Console.ForegroundColor = curColour;
+        }
+
+        /// <summary>
+        /// Console.Write with specified colour
+        /// </summary>
+        public static void WriteColourfultext(char colourchar, ConsoleColor colour)
+        {
+            var curColour = Console.ForegroundColor;
+
+            Console.ForegroundColor = colour;
+            Console.Write(colourchar);
+
+            Console.ForegroundColor = curColour;
+        }
+
+        /// <summary>
+        /// Write alternating non-whitespace characters with the specified colours
+        /// </summary>
+        public static void WriteColourfultextAlternating(string colourtext, ConsoleColor[] consoleColors = null )
+        {
+            if (consoleColors == null)
+                consoleColors = new ConsoleColor[]{ ConsoleColor.Red, ConsoleColor.Blue };
+
+            int index = 0;
+            foreach (var character in colourtext)
+            {
+                if (char.IsWhiteSpace(character))
+                    index = ++index % consoleColors.Length;
+
+                WriteColourfultext(character, consoleColors[index]);
+            }
         }
 
         public static void WriteColoufulBool(bool value)

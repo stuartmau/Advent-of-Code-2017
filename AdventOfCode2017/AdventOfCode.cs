@@ -40,8 +40,8 @@ namespace AdventOfCode2017
             //Dec21.Run(path);
             //Dec22.Run(path);
             //Dec23.Run(path);
-            Dec24.Run(path);
-            //Dec25.Run(path);
+            //Dec24.Run(path);
+            Dec25.Run(path);
 
 
             //Utilities.WriteAnimatedConsoleChirstmasTree();
