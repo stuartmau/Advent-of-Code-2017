@@ -19,8 +19,12 @@ namespace AdventOfCode2017
 
             Console.WriteLine();
             Console.WriteLine("Part2");
-            Part2ArrayVersion(Path.Combine(path, "dec13test.txt"), 10);
-            Part2ArrayVersion(Path.Combine(path, "dec13.txt"), 3970918);
+
+            //Part2(Path.Combine(path, "dec13test.txt"), 10);
+            //Part2(Path.Combine(path, "dec13.txt"), 3970918);
+            //Part2ArrayVersion(Path.Combine(path, "dec13.txt"), 3970918);
+            Part2cycleVersion(Path.Combine(path, "dec13test.txt"), 10);
+            Part2cycleVersion(Path.Combine(path, "dec13.txt"), 3970918);
         }
 
         /// <summary>
@@ -91,7 +95,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// scanner sweeps back and forth
+        /// Scanner sweeps back and forth.
         /// </summary>
         private static void SetScanner(int layer, Dictionary<int, int[]> grid)
         {
@@ -113,7 +117,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// scanner sweeps back and forth
+        /// Scanner sweeps back and forth.
         /// </summary>
         private static void SetScanner(int layer, List<int[]> grid)
         {
@@ -129,6 +133,28 @@ namespace AdventOfCode2017
                     if (mod2 >= count)
                         range[1] = count - mod;
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// Scanner sweeps back and forth. Set the entire run.
+        /// </summary>
+        private static void SetAllLayersScanner(int layer, List<int[]> grid)
+        {
+            foreach (var range in grid)
+            {
+                if (range[0] > 0)
+                {
+                    int count = range[0] - 1;
+                    int mod = layer % count;
+                    int mod2 = layer % (count * 2);
+
+                    range[1] = mod;
+                    if (mod2 >= count)
+                        range[1] = count - mod;
+                }
+                layer++;
             }
         }
 
@@ -190,11 +216,12 @@ namespace AdventOfCode2017
                 int layer = 0;
                 int severity = 0;
 
+
                 bool caught = false;
                 while (layer < count)
                 {
                     var range = grid[layer];
-                    
+
                     if (range[0] > 0 && range[1] == 0)
                     {
                         //caught at this layer!
@@ -222,7 +249,7 @@ namespace AdventOfCode2017
 
         /// <summary>
         /// Find the delay at the beginning of the trip so as not to be
-        /// caught by the scanner using arrays
+        /// caught by the scanner using arrays.
         /// </summary>
         public static void Part2ArrayVersion(string filename, int? expected = null)
         {
@@ -305,5 +332,88 @@ namespace AdventOfCode2017
             Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(delay - 1, expected);
         }
+
+        /// <summary>
+        /// Find the delay at the beginning of the trip so as not to be caught by the scanner
+        /// by cheking the delay and offset for each level. 
+        /// </summary>
+        public static void Part2cycleVersion(string filename, int? expected = null)
+        {
+            var lines = Utilities.LoadStrings(filename);
+
+            int max = 0;
+
+            //Add scanner input
+            foreach (var line in lines)
+            {
+                var split = line.Replace(":", "").Split(' ');
+                int id = int.Parse(split[0]);
+                if (id > max)
+                    max = id;
+            }
+
+            //generate grid
+            List<int[]> grid = new List<int[]>();
+            for (int i = 0; i <= max; i++)
+                grid.Add(new int[2]);
+
+            //Add scanner input max into index 0
+            foreach (var line in lines)
+            {
+                var split = line.Replace(":", "").Split(' ');
+                int id = int.Parse(split[0]);
+                grid[id][0] = int.Parse(split[1]);
+            }
+
+
+            int count = grid.Count;
+            int[] saved = new int[count];
+            int delay = 0;
+            bool found = false;
+
+            //set the cycle for each layer where the scanner catches the program
+            List<int> skiplist = new List<int>();
+
+            for (int i = 0; i <= max; i++)
+            {
+                int value = grid[i][0];
+                if (value>0)
+                {
+                    int modval = (value - 2) * 2 + 2;
+                    skiplist.Add(modval);
+                }
+                else
+                {
+                    skiplist.Add(0);
+                }
+                    
+            }
+                
+
+            while (!found)
+            {
+                bool caught = false;
+
+                //Check route through firewall. 
+                for (int i = 0; i <= max; i++)
+                {
+                    if (skiplist[i] != 0 && (delay + i) % skiplist[i] == 0)
+                    {
+                        caught = true;
+                        break;
+                    }
+                }
+
+                if (!caught)
+                    found = true;
+                else
+                    delay++;
+            }
+
+
+            Utilities.WriteInputFile(filename);
+            Utilities.WriteOutput(delay, expected);
+        }
+
     }
 }
