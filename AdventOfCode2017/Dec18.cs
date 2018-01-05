@@ -26,6 +26,9 @@ namespace AdventOfCode2017
 
             Console.WriteLine("Part2 threaded version");
             Part2B(Path.Combine(path, "dec18.txt"), 7239);
+
+            Console.WriteLine("Part2 threaded Interlock version");
+            Part2C(Path.Combine(path, "dec18.txt"), 7239);
         }
 
         /// <summary>
@@ -146,8 +149,65 @@ namespace AdventOfCode2017
                     break;
             }
 
+            Utilities.WriteInputFile(filename);
             Utilities.WriteOutput(programB.sendcount, expected);
         }
+
+        /// <summary>
+        /// How many times did program 1 send a value, run in parallel.
+        /// </summary>
+        public static void Part2B(string filename, int? expected = null)
+        {
+            InterpreterThread programA = new InterpreterThread();
+            programA.Load(0, filename);
+
+            InterpreterThread programB = new InterpreterThread();
+            programB.Load(1, filename);
+
+            programA.SetOtherProgram(programB);
+            programB.SetOtherProgram(programA);
+
+
+            ////run prog A and B until they stop
+            List<Task> tasks = new List<Task>();
+            tasks.Add(Task<int>.Factory.StartNew(() => programA.Run()));
+            tasks.Add(Task<int>.Factory.StartNew(() => programB.Run()));
+
+            Task.WaitAll(tasks.ToArray());
+
+            Utilities.WriteInputFile(filename);
+            Utilities.WriteOutput(programB.sendcount, expected);
+        }
+
+
+
+        /// <summary>
+        /// How many times did program 1 send a value, run in parallel using Interlocking.
+        /// </summary>
+        public static void Part2C(string filename, int? expected = null)
+        {
+            InterpreterThreadInterlock programA = new InterpreterThreadInterlock();
+            programA.Load(0, filename);
+
+            InterpreterThreadInterlock programB = new InterpreterThreadInterlock();
+            programB.Load(1, filename);
+
+            programA.SetOtherProgram(programB);
+            programB.SetOtherProgram(programA);
+
+
+            ////run prog A and B until they stop
+            List<Task> tasks = new List<Task>();
+            tasks.Add(Task<int>.Factory.StartNew(() => programA.Run()));
+            tasks.Add(Task<int>.Factory.StartNew(() => programB.Run()));
+
+            Task.WaitAll(tasks.ToArray());
+
+            Utilities.WriteInputFile(filename);
+            Utilities.WriteOutput(programB.sendcount, expected);
+
+        }
+
 
         private class Interpreter
         {
@@ -258,34 +318,6 @@ namespace AdventOfCode2017
         }
 
 
-        /// <summary>
-        /// How many times did program 1 send a value, run in parallel. 
-        /// </summary>
-        public static void Part2B(string filename, int? expected = null)
-        {
-            InterpreterThread programA = new InterpreterThread();
-            programA.Load(0, filename);
-
-            InterpreterThread programB = new InterpreterThread();
-            programB.Load(1, filename);
-
-            programA.SetOtherProgram(programB);
-            programB.SetOtherProgram(programA);
-
-
-            ////run prog A and B until they stop
-            List<Task> tasks = new List<Task>();
-            tasks.Add(Task<int>.Factory.StartNew(() => programA.Run()));
-            tasks.Add(Task<int>.Factory.StartNew(() => programB.Run()));
-
-            Task.WaitAll(tasks.ToArray());
-
-
-            Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(programB.sendcount, expected);
-        }
-
- 
         private class InterpreterThread
         {
             public int id;
@@ -295,10 +327,6 @@ namespace AdventOfCode2017
             public int sendcount = 0;
             public int instructionIndex = 0;
 
-
-            //note that blocking collection defaults to wrapping ConcurrentQueue (FIFO)
-            //https://docs.microsoft.com/en-us/dotnet/standard/collections/thread-safe/blockingcollection-overview
-            //public BlockingCollection<long> queue = new BlockingCollection<long>();
             public ConcurrentQueue<long> queue = new ConcurrentQueue<long>();
             InterpreterThread other = null;
             public object locker = new object();
@@ -343,6 +371,13 @@ namespace AdventOfCode2017
 
             public int Run()
             {
+                for (int i = 0; i < reg.Count; i++)
+                    reg[i] = 0;
+
+                if (id == 1)
+                    reg[2] = 1;
+
+
                 //process instructions
                 long lastSnd = -1;
 
@@ -380,7 +415,7 @@ namespace AdventOfCode2017
                             long value;
                             while (true)
                             {
-                                if (other.queue.TryDequeue(out value))
+                                if (!other.queue.IsEmpty && other.queue.TryDequeue(out value))
                                 {
                                     lock (locker)
                                         running = true;
@@ -398,7 +433,6 @@ namespace AdventOfCode2017
                                     lock (other.locker)
                                         if (!other.running)
                                             return 0;
-
                                 }
                             }
                             break;
@@ -420,6 +454,141 @@ namespace AdventOfCode2017
             }
 
         }
+
+
+        private class InterpreterThreadInterlock
+        {
+            public int id;
+            public Dictionary<string, int> registers = new Dictionary<string, int>();
+            public List<long> reg = new List<long>();
+            public List<string> instructions;
+            public int sendcount = 0;
+            public int instructionIndex = 0;
+
+            InterpreterThreadInterlock other = null;
+            public BlockingCollection<long> queue = new BlockingCollection<long>();
+            public long running = 1;
+  
+            public void Load(int id, string filename)
+            {
+                this.id = id;
+                instructions = Utilities.LoadStrings(filename);
+
+                //Find all registers
+                int count = 0;
+                foreach (var line in instructions)
+                {
+                    var split = line.Split(" ");
+                    if (split.Length > 1 && char.IsLetter(split[1].ToCharArray()[0]))
+                    {
+                        if (registers.TryAdd(split[1], count))
+                        {
+                            reg.Add(0);
+                            count++;
+                        }
+                    }
+                    if (split.Length > 2 && char.IsLetter(split[2].ToCharArray()[0]))
+                    {
+                        if (registers.TryAdd(split[2], count))
+                        {
+                            reg.Add(0);
+                            count++;
+                        }
+                    }
+                }
+
+                //initalise register p to the program id. 
+                reg[registers["p"]] = id;
+            }
+
+            public void SetOtherProgram(InterpreterThreadInterlock other)
+            {
+                this.other = other;
+            }
+
+            public int Run()
+            {
+                for (int i = 0; i < reg.Count; i++)
+                    reg[i] = 0;
+
+                if (id == 1)
+                    reg[2] = 1;
+
+
+                //process instructions
+                long lastSnd = -1;
+
+                while (instructionIndex >= 0 && instructionIndex < instructions.Count)
+                {
+                    //toggle that this thread's instruction has finished. 
+
+                    var split = instructions[instructionIndex].Split(" ");
+
+                    int name = 0;
+                    int X = 1;
+                    int Y = 2;
+                    long? jumpValue = null;
+
+                    switch (split[name])
+                    {
+                        case "snd":
+                            lastSnd = GetValue(registers, reg, split[X]);
+                            queue.Add(lastSnd);
+                            sendcount++;
+                            break;
+                        case "set":
+                            Set(registers, reg, split[X], split[Y]);
+                            break;
+                        case "add":
+                            Add(registers, reg, split[X], split[Y]);
+                            break;
+                        case "mul":
+                            Multiply(registers, reg, split[X], split[Y]);
+                            break;
+                        case "mod":
+                            Mod(registers, reg, split[X], split[Y]);
+                            break;
+                        case "rcv":
+                            long value;
+                            while (true)
+                            {
+                                if (other.queue.TryTake(out value))
+                                {
+                                    Interlocked.Exchange(ref running, 1);
+
+                                    int registerX = registers[split[X]];
+                                    reg[registerX] = value;
+
+                                    break;
+                                }
+                                else
+                                {
+                                    Interlocked.Exchange(ref running, 0);
+
+                                    if (Interlocked.Read(ref other.running) == 0)
+                                        return 0;
+                                }
+                            }
+                            break;
+                        case "jgz":
+                            jumpValue = Jump(registers, reg, split[X], split[Y]);
+                            break;
+                        default:
+                            throw new Exception("unrecognised instruction" + instructions[instructionIndex]);
+                    }
+
+                    //go to next instruction
+                    if (jumpValue == null)
+                        instructionIndex++;
+                    else
+                        instructionIndex += (int)jumpValue;
+                }
+
+                return 1;
+            }
+
+        }
+
 
         private static void Set(Dictionary<string, int> registers, List<long> reg, string X, string Y)
         {
