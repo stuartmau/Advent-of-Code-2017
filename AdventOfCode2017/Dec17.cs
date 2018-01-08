@@ -26,10 +26,10 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the value after the final insertion index. 
         /// </summary>
-        public static void Part1(int input, int? expected = null)
+        public static Result Part1(int input, int? expected = null)
         {
-            List<int> buffer = new List<int>();
-            buffer.Add(0);
+            List<int> buffer = new List<int>{0};
+
             int index = 0;
 
             for (int i = 1; i <= 2017; i++)
@@ -39,14 +39,14 @@ namespace AdventOfCode2017
             }
 
             var result = buffer[(index + 1) % buffer.Count];
-            Utilities.WriteOutput(result, expected);
+            return Utilities.WriteOutput(result, expected);
         }
 
 
         /// <summary>
         /// Find the value in index 1 after the final insertion index. 
         /// </summary>
-        public static void Part2(int input, int? expected = null)
+        public static Result Part2(int input, int? expected = null)
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -61,15 +61,15 @@ namespace AdventOfCode2017
             sw.Stop();
             
             var result = buffer[1];
-            Utilities.WriteOutput(result, expected);
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds.ToString());
+            return Utilities.WriteOutput(result, expected);
         }
 
         /// <summary>
         /// Find the value in index 1 after the final insertion index 
         /// without allocating the entire array. 
         /// </summary>
-        public static void Part2a(int input, int? expected = null)
+        public static Result Part2a(int input, int? expected = null)
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -82,9 +82,10 @@ namespace AdventOfCode2017
                     result = i;
             }
             sw.Stop();
-            Utilities.WriteOutput(result, expected);
 
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds.ToString());
+            return Utilities.WriteOutput(result, expected);
+
         }
 
     }

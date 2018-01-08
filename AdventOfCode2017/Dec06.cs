@@ -30,7 +30,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Redistribute memory and find when state cycles.
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var input = Utilities.LoadIntArrays(filename);
             Dictionary<BigInteger, int> states = new Dictionary<BigInteger, int>();
@@ -92,14 +92,15 @@ namespace AdventOfCode2017
             sw.Stop();
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(cyclecount, expected);
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
+            return Utilities.WriteOutput(cyclecount, expected);
+            
         }
 
         /// <summary>
         /// Reports the length of the cycle.
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             var input = Utilities.LoadIntArrays(filename);
             Dictionary<BigInteger, int> states = new Dictionary<BigInteger, int>();
@@ -165,8 +166,8 @@ namespace AdventOfCode2017
             sw.Stop();
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(cycleLenght, expected);
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
+            return Utilities.WriteOutput(cycleLenght, expected);
         }
 
     }

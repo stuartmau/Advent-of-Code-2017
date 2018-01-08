@@ -27,7 +27,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Enhance image and calculate number of active pixels. 
         /// </summary>
-        public static void Part1(string filename, int itterations, int? expected = null)
+        public static Result Part1(string filename, int itterations, int? expected = null)
         {
             //Load rules
             var input = Utilities.LoadStrings(filename);
@@ -51,8 +51,7 @@ namespace AdventOfCode2017
                 Segment temp = new Segment(inpattern);
                 temp.Flip();
 
-                Segment output;
-                if (!rules.TryGetValue(temp.Pattern, out output))
+                if (!rules.TryGetValue(temp.Pattern, out Segment output))
                     rules.Add(temp.Pattern, outputPattern);
 
                 Segment current = new Segment(inpattern);
@@ -164,7 +163,8 @@ namespace AdventOfCode2017
                     
             }
 
-            Utilities.WriteOutput(pixelcount, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(pixelcount, expected);
         }
 
         private class Segment

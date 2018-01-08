@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Linq;
 
 namespace AdventOfCode2017
 {
+    public enum Result { Expected, Error };
+
     public static class Utilities
     {
         public static string LineSeparator = System.Environment.NewLine + "--------------------------------" + System.Environment.NewLine;
@@ -34,24 +37,25 @@ namespace AdventOfCode2017
         ///    /*    o   _..~~`'*   o\
         ///    `-.__.~'`'   *   ___.-'
         ///          ":-------:"
-        ///        hjw \_____/ sm
+        ///            \_____/ ascii art:hjw
         /// </example>
         /// <remarks>
         /// hjw : Flump, Hayley Jane Wakenshaw - hayley@kersbergen.com
         /// </remarks>
-        public static void WriteConsoleChirstmasTree()
+        public static void WriteConsoleChirstmasTree(Random rnd)
         {
             var curColour = Console.ForegroundColor;
-            Random rnd = new Random();
 
-            List<ConsoleColor> colours = new List<ConsoleColor>();
-            colours.Add(ConsoleColor.Yellow);
-            colours.Add(ConsoleColor.Red);
-            colours.Add(ConsoleColor.Cyan);
-            colours.Add(ConsoleColor.Green);
-            colours.Add(ConsoleColor.Magenta);
-            colours.Add(ConsoleColor.Blue);
-            colours.Add(ConsoleColor.White);
+            List<ConsoleColor> colours = new List<ConsoleColor>
+            {
+                ConsoleColor.Yellow,
+                ConsoleColor.Red,
+                ConsoleColor.Cyan,
+                ConsoleColor.Green,
+                ConsoleColor.Magenta,
+                ConsoleColor.Blue,
+                ConsoleColor.White
+            };
 
             ConsoleColor y = ConsoleColor.Yellow;
             ConsoleColor g = ConsoleColor.DarkGreen;
@@ -136,17 +140,18 @@ namespace AdventOfCode2017
             WLC(@"\", g);
 
             WC(@"    `-.__", g);
-            WC(@".~'`'   *", col, colours, rnd);
-            WLC(@"   ___.-'", g);
+            WC(@".~'`'", col, colours, rnd);
+            WLC(@" * art:hjw.-'", g);
 
             WLC(@"          "":-------:""", g);
-            WLC(@"        hjw \_____/ sm", ConsoleColor.DarkYellow);
-
+            WLC(@"            \_____/", ConsoleColor.DarkYellow);
             Console.ForegroundColor = curColour;
         }
 
-        private class Snow
+        public class Snow
         {
+            public int xprev;
+            public int yprev;
             public int x;
             public int y;
             public char flake = '#';
@@ -156,54 +161,189 @@ namespace AdventOfCode2017
                 this.x = x;
                 this.y = y;
             }
+
+
+            internal void Move(Random rnd)
+            {
+                xprev = x;
+                yprev = y;
+
+                int rndval = rnd.Next(3);
+
+                switch (rndval)
+                {
+                    case 0:
+                        x--;
+                        break;
+                    case 2:
+                        x++;
+                        break;
+                    default:
+                        break;
+                }
+
+                y++;
+            }
+
+            internal bool ChangedPosition()
+            {
+                if (xprev != x || yprev != y)
+                    return true;
+                else
+                    return false;
+            }
         }
+
+
         /// <summary>
-        /// same as writeConsoleChirstmastree but with 'snow' that fills up from the bottom of the screen if left running
+        /// Same as writeConsoleChirstmastree but with 'snow' that fills up from the bottom of the screen if left running
         /// </summary>
         public static void WriteAnimatedConsoleChirstmasTree()
         {
-            int x, y = 0;
-            int height = Console.WindowHeight;
-            int width = Console.WindowWidth;
             List<Snow> snow = new List<Snow>();
             Random rnd = new Random();
+            Random rndtree = new Random();
 
-            for (int i = 0; i < 10; i++)
-            {
+            int height = Console.WindowHeight;
+            int width = Console.WindowWidth;
+
+
+            for (int i = 0; i < 30; i++)
                 snow.Add(new Snow(rnd.Next(width),rnd.Next(height)));
-            }
 
+            height = Console.WindowHeight - 1;
+            width = Console.WindowWidth - 1;
+            Console.Clear();
+            Console.CursorVisible = false;
 
-            while(true)
+            StringBuilder sb = new StringBuilder();
+            int counter = 0;
+            int seed = 0;
+
+            while (true)
             {
-                Console.Clear();
-
-                height = Console.BufferHeight-1;
-                width = Console.BufferWidth-1;
-
-                WriteConsoleChirstmasTree();
-
-                foreach(var flake in snow)
+                if (width != Console.WindowWidth - 1 || height != Console.WindowHeight - 1)
                 {
-                    Console.SetCursorPosition(flake.x, flake.y);
-                    Console.Write(flake.flake);
+                    width = Console.WindowWidth - 1;
+                    height = Console.WindowHeight - 1;
+                    Console.Clear();
                 }
 
-                System.Threading.Thread.Sleep(1000);
+                SetCursorPosition(0, 0);
+
+                //if the flake moved, clear the old flake. 
+                foreach (var flake in snow)
+                {
+                    if (flake.ChangedPosition())
+                    {
+                        width = Math.Min(Console.WindowWidth - 1, Console.BufferWidth);
+                        height = Math.Min(Console.WindowHeight - 1, Console.BufferHeight);
+
+                        if (flake.xprev >= 0 && flake.xprev < width && flake.yprev >= 0 && flake.yprev <= height)
+                        {
+                            SetCursorPosition(flake.xprev, flake.yprev);
+                            Console.Write(" ");
+                        }
+                    }
+                }
+
+                SetCursorPosition(0, 0);
+
+                Utilities.WriteColourfultext(" - 2017 Complete! - ", ConsoleColor.Green);
+                Utilities.WriteColourfultext("50 stars deposited, ", ConsoleColor.Yellow);
+                Utilities.WriteColourfultext("printing is off to Santa.", ConsoleColor.Red);
+
+
+                //draw the tree
+                if (counter % 5 == 0)
+                    seed++;
+
+                rndtree = new Random(seed);
+
+                SetCursorPosition(0, 2);
+                if (width >27)
+                    WriteConsoleChirstmasTree(rndtree);
+
+                //draw flakes
+                foreach (var flake in snow)
+                {
+                    if (flake.ChangedPosition())
+                    {
+                        width = Math.Min(Console.WindowWidth - 1, Console.BufferWidth);
+                        height = Math.Min(Console.WindowHeight - 1, Console.BufferHeight);
+
+                        if (flake.x >= 0 && flake.x < width && flake.y >= 0 && flake.y <= height)
+                        {
+                            SetCursorPosition(flake.x, flake.y);
+                            Console.Write(flake.flake);
+                        }
+                    }
+
+                    flake.Move(rnd);
+                }
+
+                int count = snow.RemoveAll(s => s.y > height);
+                for (int i = 0; i < count; i++)
+                    snow.Add(new Snow(rnd.Next(width), 0));
+
+                SetCursorPosition(0, 0);
+                Console.CursorVisible = false;
+
+                System.Threading.Thread.Sleep(750);
+                counter++;
+
             }
-            
+
+            //Console.CursorVisible = true;
+
 
         }
 
-        private static void WC(string str, ConsoleColor color)
+        /// <summary>
+        /// Ingore exceptions that arrise when the console resizes. 
+        /// </summary>
+        private static void SetCursorPosition(int left, int top)
         {
-            Console.ForegroundColor = color;
-            Console.Write(str);
+            try
+            {
+                Console.SetCursorPosition(left, top);
+            }
+            catch { }
         }
 
-        private static void WC(string str, ConsoleColor defaultcolour, List<ConsoleColor> colours, Random rnd)
+        public static void WLC(string str, ConsoleColor color)
         {
-            foreach(var letter in str)
+            WC(str, color);
+            Console.WriteLine();
+        }
+
+        public static void WC(string str, ConsoleColor color)
+        {
+            int whitespace = str.TakeWhile(Char.IsWhiteSpace).Count();
+            string trim = str.TrimStart();
+
+            SetCursorPosition(Console.CursorLeft + whitespace, Console.CursorTop);
+
+
+            foreach (var letter in trim)
+            {
+                if (letter == '*')
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                else
+                    Console.ForegroundColor = color;
+
+                Console.Write(letter);
+            }
+        }
+
+
+        public static void WC(string str, ConsoleColor defaultcolour, List<ConsoleColor> colours, Random rnd)
+        {
+            int whitespace = str.TakeWhile(Char.IsWhiteSpace).Count();
+            string trim = str.TrimStart();
+            SetCursorPosition(Console.CursorLeft + whitespace, Console.CursorTop);
+
+            foreach (var letter in trim)
             {
                 if (letter == '*')
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -217,21 +357,26 @@ namespace AdventOfCode2017
             
         }
 
-        private static void WLC(string str, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(str);
-        }
 
-        public static void WriteInputFile(string filename)
+        public static void WriteInputFile(string filename, int maxCharacters = 35)
         {
             string path = Path.GetDirectoryName(filename) + Path.DirectorySeparatorChar;
             string file = Path.GetFileName(filename);
 
+            maxCharacters = Math.Max(maxCharacters, 23);
+
+            string outputstring = filename;
+            if ( path.Length > maxCharacters)
+            {
+                outputstring = path.Substring(0,15);
+                outputstring += " ... ";
+                outputstring += path.Substring(Math.Max(path.Length - 15, 0));
+            }
+
             var curColour = Console.ForegroundColor;
             Console.Write("Input: ");
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(path);
+            Console.Write(outputstring);
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(file);
 
@@ -239,38 +384,58 @@ namespace AdventOfCode2017
             Console.ForegroundColor = curColour;
         }
 
-        public static void WriteOutput(int? sum, int? expected)
+
+
+        public static Result WriteOutput(int? sum, int? expected)
         {
-            bool found = sum == expected;
+            bool foundexpected = sum == expected;
             
             if(sum == null)
             {
                 Utilities.WriteColourfultext("Output not found", ConsoleColor.Red);
             }
 
-
             if (expected != null)
             {
                 Console.Write("output: " + sum.ToString() + " expected: ");
-                Utilities.WriteColoufulBool(found);
+                Utilities.WriteColoufulBool(foundexpected);
                 Console.WriteLine();
             }
             else
                 Console.WriteLine("output: " + sum.ToString());
+
+            if (foundexpected)
+                return Result.Expected;
+            else
+            {
+                System.Diagnostics.Debug.Assert(false);
+                Environment.Exit(1);
+                return Result.Error;
+            }
+                
         }
 
-        public static void WriteOutput(string resut, string expected)
+        public static Result WriteOutput(string resut, string expected)
         {
-            bool found = resut.Equals(expected);
+            bool foundexpected = resut.Equals(expected);
 
             if (expected != null)
             {
                 Console.Write("output: " + resut + " expected: ");
-                Utilities.WriteColoufulBool(found);
+                Utilities.WriteColoufulBool(foundexpected);
                 Console.WriteLine();
             }
             else
                 Console.WriteLine("output: " + resut);
+
+            if (foundexpected)
+                return Result.Expected;
+            else
+            {
+                System.Diagnostics.Debug.Assert(false);
+                Environment.Exit(1);
+                return Result.Error;
+            }
         }
 
         /// <summary>
@@ -363,7 +528,7 @@ namespace AdventOfCode2017
         }
 
         /// <summary>
-        /// one column of integers
+        /// One column of integers
         /// </summary>
         public static List<int> LoadIntColumn(string filename)
         {
@@ -380,6 +545,7 @@ namespace AdventOfCode2017
 
             return column;
         }
+
 
         /// <summary>
         /// array of line strings

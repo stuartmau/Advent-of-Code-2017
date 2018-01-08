@@ -95,7 +95,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the particle with the lowest accelleration. 
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var input = Utilities.LoadStrings(filename);
 
@@ -140,14 +140,15 @@ namespace AdventOfCode2017
 
             var result = particles.OrderBy(a => a.AccellerationSum).ThenBy(a => a.VelocitySum);
 
-            Utilities.WriteOutput(result.First().id, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(result.First().id, expected);
         }
 
 
         /// <summary>
         /// Count particles that didn't collide.
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             var input = Utilities.LoadStrings(filename);
 
@@ -198,7 +199,8 @@ namespace AdventOfCode2017
                     count++;
             }
 
-            Utilities.WriteOutput(count, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(count, expected);
         }
     }
 }

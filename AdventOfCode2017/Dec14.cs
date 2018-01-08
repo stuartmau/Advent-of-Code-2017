@@ -29,7 +29,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Fill a 128x128 array of bits from day 10's knot hash. Count number of used (on) bits. 
         /// </summary>
-        public static void Part1(string input, int? expected = null)
+        public static Result Part1(string input, int? expected = null)
         {
             bool[,] grid = new bool[128,128];
 
@@ -51,7 +51,8 @@ namespace AdventOfCode2017
             //count number of bits
             var count = str.Count(c => c == '1');
 
-            Utilities.WriteOutput(count, expected);
+            Console.WriteLine(input);
+            return Utilities.WriteOutput(count, expected);
         }
 
 
@@ -59,7 +60,7 @@ namespace AdventOfCode2017
         /// From the filled grid, count number of regions of adjacent bits. not including diagonals. 
         /// each square is in one region. Isolated bits are their own region. 
         /// </summary>
-        public static void Part2(string input, int? expected = null)
+        public static Result Part2(string input, int? expected = null)
         {
             int gridsize = 128;
             bool[,] grid = new bool[gridsize, gridsize];
@@ -122,7 +123,8 @@ namespace AdventOfCode2017
                 }
             }
 
-            Utilities.WriteOutput(groupcount, expected);
+            Console.WriteLine(input);
+            return Utilities.WriteOutput(groupcount, expected);
         }
 
 

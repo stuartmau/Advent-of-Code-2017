@@ -32,7 +32,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Count number of infections whilst wandering a grid 
         /// </summary>
-        public static void Part1(string filename, int itterations, int? expected = null)
+        public static Result Part1(string filename, int itterations, int? expected = null)
         {
             var input = Utilities.LoadStrings(filename);
             int columns = input[0].Length;
@@ -106,14 +106,15 @@ namespace AdventOfCode2017
 
             //WriteGrid(grid, expandedColumns, expandedRows, x, y);
 
-            Utilities.WriteOutput(infectioncounter, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(infectioncounter, expected);
         }
 
 
         /// <summary>
         /// How many itterations are required to infect a node with extra state
         /// </summary>
-        public static void Part2(string filename, int itterations, int arraysize, int? expected = null)
+        public static Result Part2(string filename, int itterations, int arraysize, int? expected = null)
         {
             if (arraysize % 2 != 1)
                 arraysize ++;
@@ -216,8 +217,8 @@ namespace AdventOfCode2017
                 //WriteGrid(grid, expandedColumns, expandedRows, x, y);
             }
 
-
-            Utilities.WriteOutput(infectioncounter, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(infectioncounter, expected);
         }
 
         private static Direction GetNextDirection(Direction direction, Direction next)

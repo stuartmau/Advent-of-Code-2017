@@ -27,7 +27,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// From a simple sequence, count number of times the lowest 16 bits match. 
         /// </summary>
-        public static void Part1(ulong A, ulong Af, ulong B, ulong Bf, ulong product, int? expected = null)
+        public static Result Part1(ulong A, ulong Af, ulong B, ulong Bf, ulong product, int? expected = null)
         {
             //long is Signed 64 bit
             long counter = 0;
@@ -46,14 +46,14 @@ namespace AdventOfCode2017
                     match++;
             }
 
-            Utilities.WriteOutput(match, expected);
+            return Utilities.WriteOutput(match, expected);
         }
 
 
         /// <summary>
         /// From a slightly different simple sequence, count number of times the lowest 16 bits match. 
         /// </summary>
-        public static void Part2(ulong A, ulong Af, ulong B, ulong Bf, ulong product, ulong Ac, ulong Bc, int? expected = null)
+        public static Result Part2(ulong A, ulong Af, ulong B, ulong Bf, ulong product, ulong Ac, ulong Bc, int? expected = null)
         {
             //long is Signed 64 bit
             long counter = 0;
@@ -82,7 +82,7 @@ namespace AdventOfCode2017
                 counter++;
             }
 
-            Utilities.WriteOutput(match, expected);
+            return Utilities.WriteOutput(match, expected);
         }
 
     }

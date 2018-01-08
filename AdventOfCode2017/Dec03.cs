@@ -6,7 +6,7 @@ namespace AdventOfCode2017
 {
     public static class Dec03
     {
-        public static void Run()
+        public static void Run(string path = null)
         {
             Console.WriteLine(Utilities.LineSeparator);
 
@@ -59,16 +59,13 @@ namespace AdventOfCode2017
         /// <summary>
         /// Distance from input to center of spiral. 
         /// </summary>
-        public static void Part1(int input, int? expected = null)
+        public static Result Part1(int input, int? expected = null)
         {
             //check for center
             int steps = 0;
 
             if (input == 1)
-            {
-                Utilities.WriteOutput(steps, expected);
-                return;
-            }
+                return Utilities.WriteOutput(steps, expected);
 
             //find ring count
             int rank = (int)Math.Truncate(Math.Sqrt(input-1)) ;
@@ -107,14 +104,14 @@ namespace AdventOfCode2017
             int moves = ringrank + var3;
 
             Console.Write("input: " + input + " ");
-            Utilities.WriteOutput(moves, expected);
+            return Utilities.WriteOutput(moves, expected);
         }
 
 
         /// <summary>
         /// Find the next largest value from spiral pattern. 
         /// </summary>
-        public static void Part2(int input, int? expected = null)
+        public static Result Part2(int input, int? expected = null)
         {
             int result = 0;
 
@@ -158,7 +155,7 @@ namespace AdventOfCode2017
             }
 
             Console.Write("input: " + input + " ");
-            Utilities.WriteOutput(result, expected);
+            return Utilities.WriteOutput(result, expected);
 
         }
 
@@ -166,7 +163,7 @@ namespace AdventOfCode2017
         public enum Direction { Left, Up, Right, Down };
 
         /// <summary>
-        /// get next direction
+        /// Get next direction
         /// </summary>
         private static Direction GetDirection(int[,] s, int i, int j)
         {

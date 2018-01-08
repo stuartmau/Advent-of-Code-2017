@@ -35,7 +35,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Product of first two elements in a list after swaping order of subelements.
         /// </summary>
-        public static void Part1(string input, int ropelength, int? expected = null)
+        public static Result Part1(string input, int ropelength, int? expected = null)
         {
             List<int> rope = new List<int>();
             for(int i =0; i < ropelength; i++)
@@ -71,14 +71,14 @@ namespace AdventOfCode2017
 
             int elementSum = rope[0] * rope[1];
 
-            Utilities.WriteOutput(elementSum, expected);
+            return Utilities.WriteOutput(elementSum, expected);
         }
 
 
         /// <summary>
         /// Product of first two elements in a list after swaping order of subelements.
         /// </summary>
-        public static string Part2(string input, int ropelength, string expected = null)
+        public static Result Part2(string input, int ropelength, string expected = null)
         {
             List<int> rope = new List<int>();
             for (int i = 0; i < ropelength; i++)
@@ -144,9 +144,7 @@ namespace AdventOfCode2017
             }
 
             //convert dense hash to hex. 
-            Utilities.WriteOutput(output, expected);
-
-            return output;
+            return Utilities.WriteOutput(output, expected);
         }
     }
 }

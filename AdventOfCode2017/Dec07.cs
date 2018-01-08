@@ -31,7 +31,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the root element of a tree.
         /// </summary>
-        public static void Part1(string filename, string expected = null)
+        public static Result Part1(string filename, string expected = null)
         {
             /*
             pbga (66)
@@ -100,14 +100,14 @@ namespace AdventOfCode2017
             string rootstring = current.name;
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(rootstring, expected);
+            return Utilities.WriteOutput(rootstring, expected);
         }
 
 
         /// <summary>
         /// Exactly one element is the wrong weight. Find the correct weight.
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             //load input and create nodes
             var input = Utilities.LoadStrings(filename);
@@ -204,7 +204,7 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput((int)correctweight, expected);
+            return Utilities.WriteOutput((int)correctweight, expected);
         }
 
 

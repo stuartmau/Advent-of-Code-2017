@@ -90,7 +90,7 @@ namespace AdventOfCode2017
         /// Find the shortest path across a hex grid using cube coordinates. 
         /// https://www.redblobgames.com/grids/hexagons/
         /// </summary>
-        public static void Part1Coordinate(string input, int? expected = null)
+        public static Result Part1Coordinate(string input, int? expected = null)
         {
             var walk = input.Split(',');
 
@@ -129,7 +129,7 @@ namespace AdventOfCode2017
 
             //caluclate distance
             int distance = CubeDistance(a, b, c, 0, 0, 0);
-            Utilities.WriteOutput(distance, expected);
+            return Utilities.WriteOutput(distance, expected);
         }
 
 
@@ -137,7 +137,7 @@ namespace AdventOfCode2017
         /// Find the shortest path across a hex grid using cube coordinates. 
         /// https://www.redblobgames.com/grids/hexagons/
         /// </summary>
-        public static void Part2Coordinate(string input, int? expected = null)
+        public static Result Part2Coordinate(string input, int? expected = null)
         {
             var walk = input.Split(',');
 
@@ -180,7 +180,7 @@ namespace AdventOfCode2017
                     maxdist = distance;
             }
            
-            Utilities.WriteOutput(maxdist, expected);
+            return Utilities.WriteOutput(maxdist, expected);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the shortest path across a hex grid brute force.
         /// </summary>
-        public static void Part1BFS(string input, int gridsize, int? expected = null)
+        public static Result Part1BFS(string input, int gridsize, int? expected = null)
         {
             var walk = input.Split(',');
 
@@ -298,7 +298,7 @@ namespace AdventOfCode2017
             for (int i = 0; i < Math.Abs(nesw); i++)
                 current = current.GetNeighbourNeSw(nesw);
 
-            Utilities.WriteOutput(current.dist, expected);
+            return Utilities.WriteOutput(current.dist, expected);
 
         }
 
@@ -307,8 +307,7 @@ namespace AdventOfCode2017
             home.distcheck = true;
             int dist = 0;
 
-            List<Hex> neighbours = new List<Hex>();
-            neighbours.Add(home);
+            List<Hex> neighbours = new List<Hex> { home };
 
             while (neighbours.Count> 0)
             {
@@ -356,7 +355,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the shortest path across a hex grid.
         /// </summary>
-        public static void Part2BFS(string input, int gridsize, int? expected = null)
+        public static Result Part2BFS(string input, int gridsize, int? expected = null)
         {
             var walk = input.Split(',');
 
@@ -438,7 +437,7 @@ namespace AdventOfCode2017
                     maxdist = current.dist;
             }
 
-            Utilities.WriteOutput(maxdist, expected);
+            return Utilities.WriteOutput(maxdist, expected);
         }
 
 

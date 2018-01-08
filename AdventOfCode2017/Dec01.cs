@@ -6,7 +6,7 @@ namespace AdventOfCode2017
 {
     public static class Dec01
     {
-        public static void Run()
+        public static void Run(string path = null)
         {
             Console.WriteLine(Utilities.LineSeparator);
             Console.WriteLine("December 1st - Inverse Captcha -");
@@ -26,7 +26,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Sum of the value of repeating digits with wrap around of last/first digit. 
         /// </summary>
-        public static void Part1(string input, int? expected = null)
+        public static Result Part1(string input, int? expected = null)
         {
             int sum = 0;
 
@@ -38,14 +38,14 @@ namespace AdventOfCode2017
                     sum += int.Parse(input.Substring(i, 1));
             }
 
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
 
 
         /// <summary>
         /// Sum of the value of digits half way around list with wrap around
         /// </summary>
-        public static void Part2(string input, int? expected = null)
+        public static Result Part2(string input, int? expected = null)
         {
             int sum = 0;
 
@@ -58,7 +58,7 @@ namespace AdventOfCode2017
                     sum += int.Parse(input.Substring(i, 1));
             }
 
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
     }
 }

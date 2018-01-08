@@ -34,7 +34,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the value of the recovered frequency. 
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var instructions = Utilities.LoadStrings(filename);
 
@@ -120,7 +120,7 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput((int)lastSnd, expected);
+            return Utilities.WriteOutput((int)lastSnd, expected);
         }
 
 
@@ -128,7 +128,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// How many times did program 1 send a value
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             Interpreter programA = new Interpreter();
             programA.Load(0, filename);
@@ -150,13 +150,13 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(programB.sendcount, expected);
+            return Utilities.WriteOutput(programB.sendcount, expected);
         }
 
         /// <summary>
         /// How many times did program 1 send a value, run in parallel.
         /// </summary>
-        public static void Part2B(string filename, int? expected = null)
+        public static Result Part2B(string filename, int? expected = null)
         {
             InterpreterThread programA = new InterpreterThread();
             programA.Load(0, filename);
@@ -169,14 +169,16 @@ namespace AdventOfCode2017
 
 
             ////run prog A and B until they stop
-            List<Task> tasks = new List<Task>();
-            tasks.Add(Task<int>.Factory.StartNew(() => programA.Run()));
-            tasks.Add(Task<int>.Factory.StartNew(() => programB.Run()));
+            List<Task> tasks = new List<Task>
+            {
+                Task<int>.Factory.StartNew(() => programA.Run()),
+                Task<int>.Factory.StartNew(() => programB.Run())
+            };
 
             Task.WaitAll(tasks.ToArray());
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(programB.sendcount, expected);
+            return Utilities.WriteOutput(programB.sendcount, expected);
         }
 
 
@@ -184,7 +186,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// How many times did program 1 send a value, run in parallel using Interlocking.
         /// </summary>
-        public static void Part2C(string filename, int? expected = null)
+        public static Result Part2C(string filename, int? expected = null)
         {
             InterpreterThreadInterlock programA = new InterpreterThreadInterlock();
             programA.Load(0, filename);
@@ -196,15 +198,17 @@ namespace AdventOfCode2017
             programB.SetOtherProgram(programA);
 
 
-            ////run prog A and B until they stop
-            List<Task> tasks = new List<Task>();
-            tasks.Add(Task<int>.Factory.StartNew(() => programA.Run()));
-            tasks.Add(Task<int>.Factory.StartNew(() => programB.Run()));
+            //Run prog A and B until they stop
+            List<Task> tasks = new List<Task>
+            {
+                Task<int>.Factory.StartNew(() => programA.Run()),
+                Task<int>.Factory.StartNew(() => programB.Run())
+            };
 
             Task.WaitAll(tasks.ToArray());
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(programB.sendcount, expected);
+            return Utilities.WriteOutput(programB.sendcount, expected);
 
         }
 
@@ -643,8 +647,7 @@ namespace AdventOfCode2017
 
         private static long GetValue(Dictionary<string, int> registers, List<long> reg, string input)
         {
-            long value;
-            if (!long.TryParse(input, out value))
+            if (!long.TryParse(input, out long value))
             {
                 int index = registers[input];
                 value = reg[index];

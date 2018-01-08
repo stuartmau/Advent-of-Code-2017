@@ -9,7 +9,7 @@ namespace AdventOfCode2017
 {
     public static class Dec19
     {
-        enum direction { up, down, left, right, none };
+        enum Direction { up, down, left, right, none };
 
         public static void Run(string path = null)
         {
@@ -28,7 +28,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the text along a path
         /// </summary>
-        public static void Part1(string filename, string expected = null)
+        public static Result Part1(string filename, string expected = null)
         {
             //read input and generate grid
             var lines = Utilities.LoadStrings(filename);
@@ -61,19 +61,19 @@ namespace AdventOfCode2017
 
             //navigate maze
             StringBuilder sb = new StringBuilder();
-            direction direction = direction.down;
+            Direction direction = Direction.down;
 
             while(true)
             {
                 switch(direction)
                 {
-                    case direction.down:
+                    case Direction.down:
                         y++; break;
-                    case direction.up:
+                    case Direction.up:
                         y--; break;
-                    case direction.left:
+                    case Direction.left:
                         x--; break;
-                    case direction.right:
+                    case Direction.right:
                         x++; break;
                 }
 
@@ -85,41 +85,38 @@ namespace AdventOfCode2017
                 if (char.IsLetter(grid[x, y]))
                     sb.Append(grid[x, y]);
 
-                if (letter == '+' && (direction == direction.up || direction == direction.down))
+                if (letter == '+' && (direction == Direction.up || direction == Direction.down))
                 {
                     //change direction to left or right
                     if (x > 0 && !char.IsWhiteSpace(grid[x - 1, y]))
-                        direction = direction.left;
+                        direction = Direction.left;
                     else if(!char.IsWhiteSpace(grid[x + 1, y]))
-                        direction = direction.right;
+                        direction = Direction.right;
                     else
-                        direction = direction.none;
+                        direction = Direction.none;
 
                 }
-                else if (letter == '+' && (direction == direction.left || direction == direction.right))
+                else if (letter == '+' && (direction == Direction.left || direction == Direction.right))
                 {
                     //change direction to up or down
                     if (y > 0 && !char.IsWhiteSpace(grid[x, y-1]))
-                        direction = direction.up;
+                        direction = Direction.up;
                     else if (!char.IsWhiteSpace(grid[x, y + 1]))
-                        direction = direction.down;
+                        direction = Direction.down;
                     else
-                        direction = direction.none;
+                        direction = Direction.none;
                 }
-
-
-
-
             }
 
-            Utilities.WriteOutput(sb.ToString(), expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(sb.ToString(), expected);
         }
 
 
         /// <summary>
         /// Count steps along a path. 
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             //read input and generate grid
             var lines = Utilities.LoadStrings(filename);
@@ -152,20 +149,20 @@ namespace AdventOfCode2017
 
             //navigate maze
             StringBuilder sb = new StringBuilder();
-            direction direction = direction.down;
+            Direction direction = Direction.down;
             int count = 0;
 
             while (true)
             {
                 switch (direction)
                 {
-                    case direction.down:
+                    case Direction.down:
                         y++; break;
-                    case direction.up:
+                    case Direction.up:
                         y--; break;
-                    case direction.left:
+                    case Direction.left:
                         x--; break;
-                    case direction.right:
+                    case Direction.right:
                         x++; break;
                 }
                 
@@ -180,31 +177,32 @@ namespace AdventOfCode2017
                 if (char.IsLetter(grid[x, y]))
                     sb.Append(grid[x, y]);
 
-                if (letter == '+' && (direction == direction.up || direction == direction.down))
+                if (letter == '+' && (direction == Direction.up || direction == Direction.down))
                 {
                     //change direction to left or right
                     if (x > 0 && !char.IsWhiteSpace(grid[x - 1, y]))
-                        direction = direction.left;
+                        direction = Direction.left;
                     else if (!char.IsWhiteSpace(grid[x + 1, y]))
-                        direction = direction.right;
+                        direction = Direction.right;
                     else
-                        direction = direction.none;
+                        direction = Direction.none;
 
                 }
-                else if (letter == '+' && (direction == direction.left || direction == direction.right))
+                else if (letter == '+' && (direction == Direction.left || direction == Direction.right))
                 {
                     //change direction to up or down
                     if (y > 0 && !char.IsWhiteSpace(grid[x, y - 1]))
-                        direction = direction.up;
+                        direction = Direction.up;
                     else if (!char.IsWhiteSpace(grid[x, y + 1]))
-                        direction = direction.down;
+                        direction = Direction.down;
                     else
-                        direction = direction.none;
+                        direction = Direction.none;
                 }
 
             }
 
-            Utilities.WriteOutput(count, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(count, expected);
         }
     }
 }

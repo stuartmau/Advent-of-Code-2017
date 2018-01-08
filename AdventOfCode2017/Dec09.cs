@@ -68,7 +68,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Count parsed groups.
         /// </summary>
-        private static int Part1Evaluate(string input, int? expected = null)
+        private static Result Part1Evaluate(string input, int? expected = null)
         {
             int index = 0;
             int group = 0;
@@ -98,15 +98,13 @@ namespace AdventOfCode2017
             if (input.Length < Console.BufferWidth)
                 Console.WriteLine(input);
 
-            Utilities.WriteOutput(score, expected);
-
-            return score;
+            return Utilities.WriteOutput(score, expected);
         }
 
         /// <summary>
-        /// Count non cancelleed characters within garbarge.
+        /// Count non-cancelled characters within garbarge.
         /// </summary>
-        private static int Part2Evaluate(string input, int? expected = null)
+        private static Result Part2Evaluate(string input, int? expected = null)
         {
             int index = 0;
             int group = 0;
@@ -139,9 +137,7 @@ namespace AdventOfCode2017
             if (input.Length < Console.BufferWidth)
                 Console.WriteLine(input);
 
-            Utilities.WriteOutput(garbageCount, expected);
-
-            return score;
+            return Utilities.WriteOutput(garbageCount, expected);
         }
     }
 }

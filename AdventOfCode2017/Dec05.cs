@@ -36,7 +36,7 @@ namespace AdventOfCode2017
         /// <summary>
         ///  Find the number of steps to jump through the instructions incrementing the instructions as each is run.
         /// </summary>
-        public static void Part1(string filename, int? expected = null, string expectedFinalState = null)
+        public static Result Part1(string filename, int? expected = null, string expectedFinalState = null)
         {
             var instructions = Utilities.LoadIntColumn(filename);
             int instrucitonCount = instructions.Count;
@@ -76,13 +76,13 @@ namespace AdventOfCode2017
                 Console.WriteLine();
             }
 
-            Utilities.WriteOutput(totalsteps, expected);
+            return Utilities.WriteOutput(totalsteps, expected);
         }
 
         /// <summary>
         ///  Find the number of steps to jump through the instructions increment and decrementing the instructions as each is run. 
         /// </summary>
-        public static void Part2(string filename, int? expected = null, string expectedFinalState = null)
+        public static Result Part2(string filename, int? expected = null, string expectedFinalState = null)
         {
             var instructions = Utilities.LoadIntColumn(filename).ToArray();
             int instrucitonCount = instructions.Length;
@@ -133,16 +133,15 @@ namespace AdventOfCode2017
                 Console.WriteLine();
             }
 
-            Utilities.WriteOutput(totalsteps, expected);
-
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
+            return Utilities.WriteOutput(totalsteps, expected);
         }
 
         /// <summary>
         ///  Find the number of steps to jump through the instructions increment and decrementing the instructions as each is run. 
         ///  while loop bounds checking removed for unsafe version. 
         /// </summary>
-        public static unsafe void Part2Unsafe(string filename, int? expected = null, string expectedFinalState = null)
+        public static unsafe Result Part2Unsafe(string filename, int? expected = null, string expectedFinalState = null)
         {
             var instructions = Utilities.LoadIntColumn(filename).ToArray();
             int instrucitonCount = (short)instructions.Length;
@@ -202,15 +201,13 @@ namespace AdventOfCode2017
                 Console.WriteLine();
             }
 
-            Utilities.WriteOutput(totalsteps, expected);
-
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
+            return Utilities.WriteOutput(totalsteps, expected);
         }
 
 
         static int RunInstructions2(int[] instructions, int instrucitonCount, ref int index, ref bool[] lockarray, ref bool[] updating, ref bool done)
         {
-
             //increment index
             //modify current. 
 
@@ -302,7 +299,7 @@ namespace AdventOfCode2017
             //modify current. 
 
             int stepsCounted = 0;
-            int lookaheadmax = 1;
+            //int lookaheadmax = 1;
 
 
             while (true)
@@ -380,7 +377,7 @@ namespace AdventOfCode2017
         /// <summary>
         ///  Find the number of steps to jump through the instructions increment and decrementing the instructions as each is run. 
         /// </summary>
-        public static void Part2parallel(string filename, int? expected = null, string expectedFinalState = null)
+        public static Result Part2parallel(string filename, int? expected = null, string expectedFinalState = null)
         {
             var instructions = Utilities.LoadIntColumn(filename).ToArray();
             int instrucitonCount = instructions.Length;
@@ -434,9 +431,8 @@ namespace AdventOfCode2017
                 Console.WriteLine();
             }
 
-            Utilities.WriteOutput(totalsteps, expected);
             Console.WriteLine("milliseconds: " + sw.ElapsedMilliseconds);
-
+            return Utilities.WriteOutput(totalsteps, expected);
         }
 
     }

@@ -22,13 +22,13 @@ namespace AdventOfCode2017
             Console.WriteLine();
             Console.WriteLine("Part2");
             Part2(Path.Combine(path, "dec08test.txt"), 10);
-            Part2(Path.Combine(path, "dec08.txt"));
+            Part2(Path.Combine(path, "dec08.txt"), 5035);
         }
 
         /// <summary>
         /// Compute instructions and find largest register at end. 
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             //load
             var strings = Utilities.LoadStrings(filename);
@@ -82,7 +82,7 @@ namespace AdventOfCode2017
             
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(largestRegister, expected);
+            return Utilities.WriteOutput(largestRegister, expected);
         }
 
 
@@ -91,7 +91,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Compute instructions and find largest register ever set. 
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             //largest register value
             int largestRegister = int.MinValue;
@@ -142,7 +142,7 @@ namespace AdventOfCode2017
 
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(largestRegister, expected);
+            return Utilities.WriteOutput(largestRegister, expected);
         }
 
         private static bool EvaluateCondtion(int registervalue, Condition condition, int conditionValue)

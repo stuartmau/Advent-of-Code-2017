@@ -14,6 +14,7 @@ namespace AdventOfCode2017
             Console.WriteLine(Utilities.LineSeparator);
             Console.WriteLine("December 16th - Permutation Promenad -");
             Console.WriteLine("Part1");
+
             var result = Part1Evaluate(5, "s1,x3/4,pe/b");
             Utilities.WriteOutput(result, "baedc");
 
@@ -70,7 +71,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Run the dance up to a billion times checking when the pattern repeats and return the appropriate billionth pattern. 
         /// </summary>
-        public static void Part2(string filename, int maxcount, string expected = null)
+        public static Result Part2(string filename, int maxcount, string expected = null)
         {
             int dancerCount = 16;
             List<int> dancers = new List<int>();
@@ -121,7 +122,8 @@ namespace AdventOfCode2017
 
             string result = sb.ToString();
 
-            Utilities.WriteOutput(result, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(result, expected);
         }
 
         private static void RunDance(int dancerCount, List<int> dancers, string[] dancemoves)

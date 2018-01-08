@@ -25,7 +25,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Sum of the difference for each row of largest and smallest values. 
         /// </summary>
-        private static void Part1(string filename, int? expected = null)
+        private static Result Part1(string filename, int? expected = null)
         {
             List<List<int>> spreadsheet = Utilities.LoadIntArrays(filename);
 
@@ -50,14 +50,14 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
 
 
         /// <summary>
         /// Sum of the evenly divisible values for each row.
         /// </summary>
-        private static void Part2(string filename, int? expected = null)
+        private static Result Part2(string filename, int? expected = null)
         {
             List<List<int>> spreadsheet = Utilities.LoadIntArrays(filename);
 
@@ -69,11 +69,10 @@ namespace AdventOfCode2017
                     for (int j = i+1; j < row.Count; j++)
                     {
                         //check for remainder
-                        int remainder;
                         int var1 = Math.Max(row[i], row[j]);
                         int var2 = Math.Min(row[i], row[j]);
 
-                        int value = Math.DivRem(var1, var2, out remainder);
+                        int value = Math.DivRem(var1, var2, out int remainder);
 
                         if ( remainder == 0)
                             sum += value;
@@ -85,7 +84,7 @@ namespace AdventOfCode2017
 
             //report
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
 
         }
 

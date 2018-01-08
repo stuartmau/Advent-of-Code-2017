@@ -24,7 +24,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Valid lines do not have duplicate words.
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var strings = Utilities.LoadStrings(filename);
 
@@ -48,14 +48,14 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
 
 
         /// <summary>
         /// Valid lines do not have duplicate words or annagrams. 
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             var strings = Utilities.LoadStrings(filename);
 
@@ -94,7 +94,7 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
     }
 }

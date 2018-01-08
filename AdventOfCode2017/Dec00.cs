@@ -24,20 +24,20 @@ namespace AdventOfCode2017
         /// <summary>
         /// 
         /// </summary>
-        public static void Part1(string input, int? expected = null)
+        public static Result Part1(string input, int? expected = null)
         {
             int sum = 0;
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        public static void Part2(string input, int? expected = null)
+        public static Result Part2(string input, int? expected = null)
         {
             int sum = 0;
-            Utilities.WriteOutput(sum, expected);
+            return Utilities.WriteOutput(sum, expected);
         }
     }
 }

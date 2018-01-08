@@ -24,7 +24,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Count the number of times the multiply instruction is executed. 
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var instructions = Utilities.LoadStrings(filename);
 
@@ -80,14 +80,15 @@ namespace AdventOfCode2017
 
             }
 
-            Utilities.WriteOutput((int)mulCount, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput((int)mulCount, expected);
         }
 
 
         /// <summary>
         /// C# version of input code without loop optimisation.
         /// </summary>
-        public static void Part2A(int? expected = null)
+        public static Result Part2A(int? expected = null)
         {
             long b = (99 * 100) - -100_000;
             long c = b - -17000;
@@ -133,13 +134,13 @@ namespace AdventOfCode2017
             }
             while (true);
 
-            Utilities.WriteOutput((int)h, expected);
+            return Utilities.WriteOutput((int)h, expected);
         }
 
         /// <summary>
         /// Count the number of non-primes in a sequence between two numbers. 
         /// </summary>
-        public static void Part2B(int? expected = null)
+        public static Result Part2B(int? expected = null)
         {
             long b = 109_900;
             long c = 126_900;
@@ -168,7 +169,7 @@ namespace AdventOfCode2017
                 b += 17;
             }
 
-            Utilities.WriteOutput((int)h, expected);
+            return Utilities.WriteOutput((int)h, expected);
         }
 
         /// <summary>
@@ -239,8 +240,7 @@ namespace AdventOfCode2017
         [DebuggerStepThrough]
         private static long GetValue(Dictionary<string, int> registers, List<long> reg, string input)
         {
-            long value;
-            if (!long.TryParse(input, out value))
+            if (!long.TryParse(input, out long value))
             {
                 int index = registers[input];
                 value = reg[index];

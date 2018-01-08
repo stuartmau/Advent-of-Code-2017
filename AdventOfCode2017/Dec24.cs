@@ -27,7 +27,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Find the strongest bridge.
         /// </summary>
-        private static void Part1(string filename, int? expected)
+        private static Result Part1(string filename, int? expected)
         {
             Bridges bridges = new Bridges();
 
@@ -41,13 +41,14 @@ namespace AdventOfCode2017
 
             Recursive(0, 0, 0, bridges);
 
-            Utilities.WriteOutput(bridges.maxStrength, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(bridges.maxStrength, expected);
         }
 
         /// <summary>
         /// Find the strongest bridge of the longest bridges.
         /// </summary>
-        private static void Part2(string filename, int? expected)
+        private static Result Part2(string filename, int? expected)
         {
             Bridges bridges = new Bridges();
 
@@ -61,7 +62,8 @@ namespace AdventOfCode2017
 
             Recursive(0, 0, 0, bridges);
 
-            Utilities.WriteOutput(bridges.maxStrengthLongest, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(bridges.maxStrengthLongest, expected);
         }
 
 

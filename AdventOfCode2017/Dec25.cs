@@ -18,15 +18,16 @@ namespace AdventOfCode2017
             Part1(Path.Combine(path, "dec25.txt"), 3145);
 
             Console.WriteLine();
-            Utilities.WriteColourfultext("Part2 - 2017 Complete! -", ConsoleColor.Green);
-            Utilities.WriteColourfultext(" 50 stars deposited,", ConsoleColor.Yellow);
-            Utilities.WriteColourfultext(" printing is off to Santa.", ConsoleColor.Red);
+            Console.Write("Part2");
+            Utilities.WriteColourfultext(" - 2017 Complete! - ", ConsoleColor.Green);
+            Utilities.WriteColourfultext("50 stars deposited, ", ConsoleColor.Yellow);
+            Utilities.WriteColourfultext("printing is off to Santa.", ConsoleColor.Red);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var blueprints = Utilities.LoadStrings(filename);
 
@@ -62,9 +63,7 @@ namespace AdventOfCode2017
 
 
             int index = 0;
-            List<int> tape = new List<int>();
-            tape.Add(0);
- 
+            List<int> tape = new List<int> { 0 };
 
             State current = states[startstate];
 
@@ -89,7 +88,8 @@ namespace AdventOfCode2017
             foreach (var value in tape)
                 checksum += value;
 
-            Utilities.WriteOutput(checksum, expected);
+            Utilities.WriteInputFile(filename);
+            return Utilities.WriteOutput(checksum, expected);
         }
 
 

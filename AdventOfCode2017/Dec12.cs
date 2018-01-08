@@ -26,7 +26,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Count connected IDs
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             var lines = Utilities.LoadStrings(filename);
 
@@ -68,14 +68,14 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(found.Count, expected);
+            return Utilities.WriteOutput(found.Count, expected);
         }
 
 
         /// <summary>
         /// Count groups
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             var lines = Utilities.LoadStrings(filename);
 
@@ -109,7 +109,7 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(groups, expected);
+            return Utilities.WriteOutput(groups, expected);
         }
 
         private static List<int> FindConnected(int startID, Dictionary<int, List<int>> map)

@@ -30,7 +30,7 @@ namespace AdventOfCode2017
         /// <summary>
         /// Count the number of times caught by the scanner.
         /// </summary>
-        public static void Part1(string filename, int? expected = null)
+        public static Result Part1(string filename, int? expected = null)
         {
             //depth: range
             //0: 3
@@ -91,7 +91,7 @@ namespace AdventOfCode2017
             }
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(severity, expected);
+            return Utilities.WriteOutput(severity, expected);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace AdventOfCode2017
         /// Find the delay at the beginning of the trip so as not to be
         /// caught by the scanner using a dictionary. 
         /// </summary>
-        public static void Part2(string filename, int? expected = null)
+        public static Result Part2(string filename, int? expected = null)
         {
             var lines = Utilities.LoadStrings(filename);
 
@@ -244,14 +244,14 @@ namespace AdventOfCode2017
 
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(delay-1, expected);
+            return Utilities.WriteOutput(delay-1, expected);
         }
 
         /// <summary>
         /// Find the delay at the beginning of the trip so as not to be
         /// caught by the scanner using arrays.
         /// </summary>
-        public static void Part2ArrayVersion(string filename, int? expected = null)
+        public static Result Part2ArrayVersion(string filename, int? expected = null)
         {
             var lines = Utilities.LoadStrings(filename);
 
@@ -330,14 +330,14 @@ namespace AdventOfCode2017
 
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(delay - 1, expected);
+            return Utilities.WriteOutput(delay - 1, expected);
         }
 
         /// <summary>
         /// Find the delay at the beginning of the trip so as not to be caught by the scanner
         /// by cheking the delay and offset for each level. 
         /// </summary>
-        public static void Part2cycleVersion(string filename, int? expected = null)
+        public static Result Part2cycleVersion(string filename, int? expected = null)
         {
             var lines = Utilities.LoadStrings(filename);
 
@@ -412,7 +412,7 @@ namespace AdventOfCode2017
 
 
             Utilities.WriteInputFile(filename);
-            Utilities.WriteOutput(delay, expected);
+            return Utilities.WriteOutput(delay, expected);
         }
 
     }
